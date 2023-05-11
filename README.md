@@ -225,29 +225,3 @@ To test that mapping worked, you can send a JSON-RPC curl request to the host po
 ```
 curl --data-binary '{"jsonrpc":"1.0","id":"1","method":"getnetworkinfo","params":[]}' http://foo:qDDZdeQ5vw9XXFeVnXT4PZ--tGN2xNjjR4nrtyszZx0=@127.0.0.1:18443/
 ```
-
-#### Mainnet
-
-- JSON-RPC/REST: 8332
-- P2P: 8333
-
-#### Testnet
-
-- Testnet JSON-RPC: 18332
-- P2P: 18333
-
-#### Regtest
-
-- JSON-RPC/REST: 18443 (_since 0.16+_, otherwise _18332_)
-- P2P: 18444
-
-#### Signet
-
-- JSON-RPC/REST: 38332
-- P2P: 38333
-
-## License
-
-[License information](https://github.com/bitcoin/bitcoin/blob/master/COPYING) for the software contained in this image.
-
-[License information](https://github.com/kroese/docker-bitcoin/blob/master/LICENSE) for the [kroese/docker-bitcoin][docker-hub-url] docker project.
