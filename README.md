@@ -1,6 +1,6 @@
-# ruimarinho/bitcoin-core
+# kroese/docker-bitcoin
 
-A bitcoin-core docker image with support for the following platforms:
+A docker image of Bitcoin Core with support for the following platforms:
 
 * `amd64` (x86_64)
 * `arm32v7` (armv7)
