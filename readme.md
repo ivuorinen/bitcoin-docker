@@ -20,28 +20,6 @@ A docker image of Bitcoin Core with support for the following platforms:
 * `arm32v7` (armv7)
 * `arm64` (aarch64, armv8)
 
-## Tags
-
-- `24.0.1`, `24`, `latest` ([24/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/24/Dockerfile)) [**multi-arch**]
-- `24.0.1-alpine`, `24-alpine` ([24/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/24/alpine/Dockerfile))
-
-- `23.0`, `23` ([23/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/23/Dockerfile)) [**multi-arch**]
-- `23.0-alpine`, `23-alpine` ([23/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/23/alpine/Dockerfile))
-
-- `22.0`, `22`, ([22/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/22/Dockerfile)) [**multi-arch**]
-- `22.0-alpine`, `22-alpine` ([22/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/22/alpine/Dockerfile))
-
-**Multi-architecture builds**
-
-The newest images (Debian-based, *0.19+*) provide built-in support for multiple architectures. Running `docker pull` on any of the supported platforms will automatically choose the right image for you as all of the manifests and artifacts are pushed to the Docker registry.
-
-**Picking the right tag**
-
-- `kroese/docker-bitcoin:latest`: points to the latest stable release available of Bitcoin Core. Caution when using in production as blindly upgrading Bitcoin Core is a risky procedure.
-- `kroese/docker-bitcoin:alpine`: same as above but using the Alpine Linux distribution (a resource efficient Linux distribution with security in mind, but not officially supported by the Bitcoin Core team — use at your own risk).
-- `kroese/docker-bitcoin:<version>`: based on a slim Debian image, this tag format points to a specific version branch (e.g. `0.20`) or release of Bitcoin Core (e.g. `0.20.1`). Uses the pre-compiled binaries which are distributed by the Bitcoin Core team.
-- `kroese/docker-bitcoin:<version>-alpine`: same as above but using the Alpine Linux distribution.
-
 ## What is Bitcoin Core?
 
 Bitcoin Core is a reference client that implements the Bitcoin protocol for remote procedure call (RPC) use. It is also the second Bitcoin client in the network's history. Learn more about Bitcoin Core on the [Bitcoin Developer Reference docs](https://bitcoin.org/en/developer-reference).
