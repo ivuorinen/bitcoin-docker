@@ -9,7 +9,6 @@ jobs:
       matrix:
         version:
           - '24'
-          - '24/alpine'
 
       fail-fast: false
     steps:
