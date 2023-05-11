@@ -9,7 +9,7 @@
 [hub_url]: https://hub.docker.com/r/kroese/docker-bitcoin
 [tag_url]: https://hub.docker.com/r/kroese/docker-bitcoin/tags
 
-[Build]: https://github.com/kroese/docker-bitcoin/actions/workflows/build.yml/badge.svg
+[Build]: https://github.com/kroese/docker-bitcoin/actions/workflows/build.yaml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/kroese/docker-bitcoin/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/kroese/docker-bitcoin.svg?style=flat&label=pulls&logo=docker
 [Version]: https://img.shields.io/docker/v/kroese/docker-bitcoin?arch=amd64&sort=semver&color=066da5
