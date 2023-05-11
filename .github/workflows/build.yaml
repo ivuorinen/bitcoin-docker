@@ -1,4 +1,4 @@
-name: build
+name: Build
 
 on: [workflow_dispatch]
 
@@ -10,10 +10,6 @@ jobs:
         version:
           - '24'
           - '24/alpine'
-          - '23'
-          - '23/alpine'
-          - '22'
-          - '22/alpine'
 
       fail-fast: false
     steps:
