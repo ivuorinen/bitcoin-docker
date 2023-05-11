@@ -1,4 +1,4 @@
-# kroese/docker-bitcoin
+# docker-bitcoin
 
 A docker image of Bitcoin Core with support for the following platforms:
 
@@ -18,27 +18,6 @@ A docker image of Bitcoin Core with support for the following platforms:
 
 - `22.0`, `22`, ([22/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/22/Dockerfile)) [**multi-arch**]
 - `22.0-alpine`, `22-alpine` ([22/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/22/alpine/Dockerfile))
-
-- `0.21.1`, `0.21` ([0.21/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.21/Dockerfile)) [**multi-arch**]
-- `0.21.1-alpine`, `0.21-alpine` ([0.21/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.21/alpine/Dockerfile))
-
-- `0.20.1`, `0.20` ([0.20/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.20/Dockerfile)) [**multi-arch**]
-- `0.20.1-alpine`, `0.20-alpine` ([0.20/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.20/alpine/Dockerfile))
-
-- `0.19.1`, `0.19` ([0.19/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.19/Dockerfile)) [**multi-arch**]
-- `0.19.1-alpine`, `0.19-alpine` ([0.19/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.19/alpine/Dockerfile))
-
-- `0.18.1`, `0.18`, ([0.18/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.18/Dockerfile))
-- `0.18.1-alpine`, `0.18-alpine` ([0.18/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.18/alpine/Dockerfile))
-
-- `0.17.1`, `0.17` ([0.17/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.17/Dockerfile))
-- `0.17.1-alpine`, `0.17-alpine` ([0.17/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.17/alpine/Dockerfile))
-
-- `0.16.3`, `0.16` ([0.16/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.16/Dockerfile))
-- `0.16.3-alpine`, `0.16-alpine` ([0.16/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.16/alpine/Dockerfile))
-
-- `0.15.1`, `0.15` ([0.15/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.15/Dockerfile))
-- `0.15.1-alpine`, `0.15-alpine` ([0.15/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.15/alpine/Dockerfile))
 
 **Multi-architecture builds**
 
