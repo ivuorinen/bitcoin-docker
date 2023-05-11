@@ -246,32 +246,8 @@ curl --data-binary '{"jsonrpc":"1.0","id":"1","method":"getnetworkinfo","params"
 - JSON-RPC/REST: 38332
 - P2P: 38333
 
-## Archived tags
-
-_Please note that due to [CVE-2018-17144](https://nvd.nist.gov/vuln/detail/CVE-2018-17144), the following tags are unavailable: 0.14.0, 0.14.1, 0.14.2, 0.15.0, 0.15.0.1, 0.15.1, 0.16.0, 0.16.1 and 0.16.2._
-
-For historical reasons, the following tags are still available and automatically updated when the underlying base image (_Alpine Linux_ or _Debian stable_) is updated as well:
-
-- `0.13.2`, `0.13` ([0.13/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.13/Dockerfile))
-- `0.13.2-alpine`, `0.13-alpine` ([0.13/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.13/alpine/Dockerfile))
-
-- `0.12.1`, `0.12` ([0.12/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.12/Dockerfile))
-- `0.12.1-alpine`, `0.12-alpine` ([0.12/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.12/alpine/Dockerfile))
-
-- `0.11.2`, `0.11` ([0.11/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.11/Dockerfile))
-- `0.11.2-alpine`, `0.11-alpine` ([0.11/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.11/alpine/Dockerfile))
-
-## Docker
-
-This image is officially supported on Docker version 17.09, with support for older versions provided on a best-effort basis.
-
 ## License
 
 [License information](https://github.com/bitcoin/bitcoin/blob/master/COPYING) for the software contained in this image.
 
 [License information](https://github.com/kroese/docker-bitcoin/blob/master/LICENSE) for the [kroese/docker-bitcoin][docker-hub-url] docker project.
-
-[docker-hub-url]: https://hub.docker.com/r/kroese/docker-bitcoin
-[docker-pulls-image]: https://img.shields.io/docker/pulls/kroese/docker-bitcoin.svg?style=flat-square
-[docker-size-image]: https://img.shields.io/docker/image-size/kroese/docker-bitcoin?style=flat-square
-[docker-stars-image]: https://img.shields.io/docker/stars/kroese/docker-bitcoin.svg?style=flat-square
