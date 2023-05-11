@@ -6,18 +6,18 @@ A docker image of Bitcoin Core with support for the following platforms:
 * `arm32v7` (armv7)
 * `arm64` (aarch64, armv8)
 
-[![ruimarinho/bitcoin-core][docker-pulls-image]][docker-hub-url] [![ruimarinho/bitcoin-core][docker-stars-image]][docker-hub-url] [![ruimarinho/bitcoin-core][docker-size-image]][docker-hub-url]
+[![kroese/docker-bitcoin][docker-pulls-image]][docker-hub-url] [![kroese/docker-bitcoin][docker-stars-image]][docker-hub-url] [![kroese/docker-bitcoin][docker-size-image]][docker-hub-url]
 
 ## Tags
 
-- `24.0.1`, `24`, `latest` ([24/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/24/Dockerfile)) [**multi-arch**]
-- `24.0.1-alpine`, `24-alpine` ([24/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/24/alpine/Dockerfile))
+- `24.0.1`, `24`, `latest` ([24/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/24/Dockerfile)) [**multi-arch**]
+- `24.0.1-alpine`, `24-alpine` ([24/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/24/alpine/Dockerfile))
 
-- `23.0`, `23` ([23/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/23/Dockerfile)) [**multi-arch**]
-- `23.0-alpine`, `23-alpine` ([23/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/23/alpine/Dockerfile))
+- `23.0`, `23` ([23/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/23/Dockerfile)) [**multi-arch**]
+- `23.0-alpine`, `23-alpine` ([23/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/23/alpine/Dockerfile))
 
-- `22.0`, `22`, ([22/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/22/Dockerfile)) [**multi-arch**]
-- `22.0-alpine`, `22-alpine` ([22/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/22/alpine/Dockerfile))
+- `22.0`, `22`, ([22/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/22/Dockerfile)) [**multi-arch**]
+- `22.0-alpine`, `22-alpine` ([22/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/22/alpine/Dockerfile))
 
 **Multi-architecture builds**
 
@@ -25,10 +25,10 @@ The newest images (Debian-based, *0.19+*) provide built-in support for multiple 
 
 **Picking the right tag**
 
-- `ruimarinho/bitcoin-core:latest`: points to the latest stable release available of Bitcoin Core. Caution when using in production as blindly upgrading Bitcoin Core is a risky procedure.
-- `ruimarinho/bitcoin-core:alpine`: same as above but using the Alpine Linux distribution (a resource efficient Linux distribution with security in mind, but not officially supported by the Bitcoin Core team — use at your own risk).
-- `ruimarinho/bitcoin-core:<version>`: based on a slim Debian image, this tag format points to a specific version branch (e.g. `0.20`) or release of Bitcoin Core (e.g. `0.20.1`). Uses the pre-compiled binaries which are distributed by the Bitcoin Core team.
-- `ruimarinho/bitcoin-core:<version>-alpine`: same as above but using the Alpine Linux distribution.
+- `kroese/docker-bitcoin:latest`: points to the latest stable release available of Bitcoin Core. Caution when using in production as blindly upgrading Bitcoin Core is a risky procedure.
+- `kroese/docker-bitcoin:alpine`: same as above but using the Alpine Linux distribution (a resource efficient Linux distribution with security in mind, but not officially supported by the Bitcoin Core team — use at your own risk).
+- `kroese/docker-bitcoin:<version>`: based on a slim Debian image, this tag format points to a specific version branch (e.g. `0.20`) or release of Bitcoin Core (e.g. `0.20.1`). Uses the pre-compiled binaries which are distributed by the Bitcoin Core team.
+- `kroese/docker-bitcoin:<version>-alpine`: same as above but using the Alpine Linux distribution.
 
 ## What is Bitcoin Core?
 
@@ -41,7 +41,7 @@ Bitcoin Core is a reference client that implements the Bitcoin protocol for remo
 This image contains the main binaries from the Bitcoin Core project - `bitcoind`, `bitcoin-cli` and `bitcoin-tx`. It behaves like a binary, so you can pass any arguments to the image and they will be forwarded to the `bitcoind` binary:
 
 ```sh
-❯ docker run --rm -it ruimarinho/bitcoin-core \
+❯ docker run --rm -it kroese/docker-bitcoin \
   -printtoconsole \
   -regtest=1 \
   -rpcallowip=172.17.0.0/16 \
@@ -50,10 +50,10 @@ This image contains the main binaries from the Bitcoin Core project - `bitcoind`
 
 _Note: [learn more](#using-rpcauth-for-remote-authentication) about how `-rpcauth` works for remote authentication._
 
-By default, `bitcoind` will run as user `bitcoin` in the group `bitcoin` for security reasons and with its default data dir set to `~/.bitcoin`. If you'd like to customize where `bitcoin-core` stores its data, you must use the `BITCOIN_DATA` environment variable. The directory will be automatically created with the correct permissions for the `bitcoin` user and `bitcoind` automatically configured to use it.
+By default, `bitcoind` will run as user `bitcoin` in the group `bitcoin` for security reasons and with its default data dir set to `~/.bitcoin`. If you'd like to customize where `docker-bitcoin` stores its data, you must use the `BITCOIN_DATA` environment variable. The directory will be automatically created with the correct permissions for the `bitcoin` user and `bitcoind` automatically configured to use it.
 
 ```sh
-❯ docker run --env BITCOIN_DATA=/var/lib/bitcoin-core --rm -it ruimarinho/bitcoin-core \
+❯ docker run --env BITCOIN_DATA=/var/lib/docker-bitcoin --rm -it kroese/docker-bitcoin \
   -printtoconsole \
   -regtest=1
 ```
@@ -61,7 +61,7 @@ By default, `bitcoind` will run as user `bitcoin` in the group `bitcoin` for sec
 You can also mount a directory in a volume under `/home/bitcoin/.bitcoin` in case you want to access it on the host:
 
 ```sh
-❯ docker run -v ${PWD}/data:/home/bitcoin/.bitcoin -it --rm ruimarinho/bitcoin-core \
+❯ docker run -v ${PWD}/data:/home/bitcoin/.bitcoin -it --rm kroese/docker-bitcoin \
   -printtoconsole \
   -regtest=1
 ```
@@ -69,8 +69,8 @@ You can also mount a directory in a volume under `/home/bitcoin/.bitcoin` in cas
 You can optionally create a service using `docker-compose`:
 
 ```yml
-bitcoin-core:
-  image: ruimarinho/bitcoin-core
+docker-bitcoin:
+  image: kroese/docker-bitcoin
   command:
     -printtoconsole
     -regtest=1
@@ -83,7 +83,7 @@ By default, images are created with a `bitcoin` user/group using a static UID/GI
 If you'd like to use the pre-built images, uou can also customize the UID/GID on runtime via environment variables `$UID` and `$GID`:
 
 ```sh
-❯ docker run -e UID=10000 -e GID=10000 -it --rm ruimarinho/bitcoin-core \
+❯ docker run -e UID=10000 -e GID=10000 -it --rm kroese/docker-bitcoin \
   -printtoconsole \
   -regtest=1
 ```
@@ -103,7 +103,7 @@ The second option is making a remote procedure call using a username and passwor
 Start by launch the Bitcoin Core daemon:
 
 ```sh
-❯ docker run --rm --name bitcoin-server -it ruimarinho/bitcoin-core \
+❯ docker run --rm --name bitcoin-server -it kroese/docker-bitcoin \
   -printtoconsole \
   -regtest=1
 ```
@@ -152,7 +152,7 @@ Now that you have your credentials, you need to start the Bitcoin Core daemon wi
 Let's opt for the Docker way:
 
 ```sh
-❯ docker run --rm --name bitcoin-server -it ruimarinho/bitcoin-core \
+❯ docker run --rm --name bitcoin-server -it kroese/docker-bitcoin \
   -printtoconsole \
   -regtest=1 \
   -rpcallowip=172.17.0.0/16 \
@@ -164,12 +164,12 @@ Two important notes:
 1. Some shells require escaping the rpcauth line (e.g. zsh), as shown above.
 2. It is now perfectly fine to pass the rpcauth line as a command line argument. Unlike `-rpcpassword`, the content is hashed so even if the arguments would be exposed, they would not allow the attacker to get the actual password.
 
-You can now connect via `bitcoin-cli` or any other [compatible client](https://github.com/ruimarinho/bitcoin-core). You will still have to define a username and password when connecting to the Bitcoin Core RPC server.
+You can now connect via `bitcoin-cli` or any other [compatible client](https://github.com/kroese/docker-bitcoin). You will still have to define a username and password when connecting to the Bitcoin Core RPC server.
 
 To avoid any confusion about whether or not a remote call is being made, let's spin up another container to execute `bitcoin-cli` and connect it via the Docker network using the password generated above:
 
 ```sh
-❯ docker run -it --link bitcoin-server --rm ruimarinho/bitcoin-core \
+❯ docker run -it --link bitcoin-server --rm kroese/docker-bitcoin \
   bitcoin-cli \
   -rpcconnect=bitcoin-server \
   -regtest \
@@ -200,7 +200,7 @@ Example for running a node in `regtest` mode mapping JSON-RPC/REST (18443) and P
 docker run --rm -it \
   -p 18443:18443 \
   -p 18444:18444 \
-  ruimarinho/bitcoin-core \
+  kroese/docker-bitcoin \
   -printtoconsole \
   -regtest=1 \
   -rpcallowip=172.17.0.0/16 \
@@ -240,14 +240,14 @@ _Please note that due to [CVE-2018-17144](https://nvd.nist.gov/vuln/detail/CVE-2
 
 For historical reasons, the following tags are still available and automatically updated when the underlying base image (_Alpine Linux_ or _Debian stable_) is updated as well:
 
-- `0.13.2`, `0.13` ([0.13/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.13/Dockerfile))
-- `0.13.2-alpine`, `0.13-alpine` ([0.13/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.13/alpine/Dockerfile))
+- `0.13.2`, `0.13` ([0.13/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.13/Dockerfile))
+- `0.13.2-alpine`, `0.13-alpine` ([0.13/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.13/alpine/Dockerfile))
 
-- `0.12.1`, `0.12` ([0.12/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.12/Dockerfile))
-- `0.12.1-alpine`, `0.12-alpine` ([0.12/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.12/alpine/Dockerfile))
+- `0.12.1`, `0.12` ([0.12/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.12/Dockerfile))
+- `0.12.1-alpine`, `0.12-alpine` ([0.12/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.12/alpine/Dockerfile))
 
-- `0.11.2`, `0.11` ([0.11/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.11/Dockerfile))
-- `0.11.2-alpine`, `0.11-alpine` ([0.11/alpine/Dockerfile](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/0.11/alpine/Dockerfile))
+- `0.11.2`, `0.11` ([0.11/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.11/Dockerfile))
+- `0.11.2-alpine`, `0.11-alpine` ([0.11/alpine/Dockerfile](https://github.com/kroese/docker-bitcoin/blob/master/0.11/alpine/Dockerfile))
 
 ## Docker
 
@@ -257,9 +257,9 @@ This image is officially supported on Docker version 17.09, with support for old
 
 [License information](https://github.com/bitcoin/bitcoin/blob/master/COPYING) for the software contained in this image.
 
-[License information](https://github.com/ruimarinho/docker-bitcoin-core/blob/master/LICENSE) for the [ruimarinho/docker-bitcoin-core][docker-hub-url] docker project.
+[License information](https://github.com/kroese/docker-bitcoin/blob/master/LICENSE) for the [kroese/docker-bitcoin][docker-hub-url] docker project.
 
-[docker-hub-url]: https://hub.docker.com/r/ruimarinho/bitcoin-core
-[docker-pulls-image]: https://img.shields.io/docker/pulls/ruimarinho/bitcoin-core.svg?style=flat-square
-[docker-size-image]: https://img.shields.io/docker/image-size/ruimarinho/bitcoin-core?style=flat-square
-[docker-stars-image]: https://img.shields.io/docker/stars/ruimarinho/bitcoin-core.svg?style=flat-square
+[docker-hub-url]: https://hub.docker.com/r/kroese/docker-bitcoin
+[docker-pulls-image]: https://img.shields.io/docker/pulls/kroese/docker-bitcoin.svg?style=flat-square
+[docker-size-image]: https://img.shields.io/docker/image-size/kroese/docker-bitcoin?style=flat-square
+[docker-stars-image]: https://img.shields.io/docker/stars/kroese/docker-bitcoin.svg?style=flat-square
