@@ -1,12 +1,24 @@
 # docker-bitcoin
 
+[![Build]][build_url]
+[![Version]][tag_url]
+[![Size]][tag_url]
+[![Pulls]][hub_url]
+
+[build_url]: https://github.com/kroese/docker-bitcoin/
+[hub_url]: https://hub.docker.com/r/kroese/docker-bitcoin
+[tag_url]: https://hub.docker.com/r/kroese/docker-bitcoin/tags
+
+[Build]: https://github.com/kroese/docker-bitcoin/actions/workflows/build.yml/badge.svg
+[Size]: https://img.shields.io/docker/image-size/kroese/docker-bitcoin/latest?color=066da5&label=size
+[Pulls]: https://img.shields.io/docker/pulls/kroese/docker-bitcoin.svg?style=flat&label=pulls&logo=docker
+[Version]: https://img.shields.io/docker/v/kroese/docker-bitcoin?arch=amd64&sort=semver&color=066da5
+
 A docker image of Bitcoin Core with support for the following platforms:
 
 * `amd64` (x86_64)
 * `arm32v7` (armv7)
 * `arm64` (aarch64, armv8)
-
-[![kroese/docker-bitcoin][docker-pulls-image]][docker-hub-url] [![kroese/docker-bitcoin][docker-stars-image]][docker-hub-url] [![kroese/docker-bitcoin][docker-size-image]][docker-hub-url]
 
 ## Tags
 
