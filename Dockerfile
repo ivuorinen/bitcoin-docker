@@ -25,7 +25,7 @@ LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
 LABEL org.opencontainers.image.version=${BITCOIN_VERSION}
 LABEL org.opencontainers.image.source=https://github.com/docker-bitcoin/docker-bitcoin/
-LABEL org.opencontainers.image.url=https://hub.docker.com/r/docker-bitcoin/docker-bitcoin/
+LABEL org.opencontainers.image.url=https://hub.docker.com/r/dockerbitcoin/docker-bitcoin/
 
 RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
