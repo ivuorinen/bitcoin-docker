@@ -9,7 +9,7 @@ ARG DEBIAN_FRONTEND noninteractive
 RUN groupadd --gid ${GID} bitcoin \
   && useradd --create-home --no-log-init -u ${UID} -g ${GID} bitcoin \
   && apt-get update -y \
-  && apt-get --no-install-recommends -y install curl gnupg gosu binutils ca-certificates \
+  && apt-get --no-install-recommends -y install curl gnupg gosu ca-certificates \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -60,9 +60,9 @@ RUN set -ex \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz *.asc \
   && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt \
+  && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/test-bitcoin \
   && ls -lh /opt/bitcoin-${BITCOIN_VERSION}/bin \
-  && strip -v /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin* \
-  && ls -lh /opt/bitcoin-${BITCOIN_VERSION}/bin
+  && ls -lh /opt/bitcoin-${BITCOIN_VERSION} 
   
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
