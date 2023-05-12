@@ -13,8 +13,8 @@ RUN groupadd --gid ${GID} bitcoin \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG TARGETVERSION
 ARG TARGETPLATFORM
-ARG TARGETVERSION=24.0.1
 
 ENV BITCOIN_VERSION=${TARGETVERSION}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
