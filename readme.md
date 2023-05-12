@@ -35,7 +35,7 @@ Via `docker run`
 docker run -it --rm docker-bitcoin/docker-bitcoin:latest -printtoconsole
 ```
 
-Executing `getinfo` on a running container:
+Executing `getinfo` on the running container:
 
 ```bash
 docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
