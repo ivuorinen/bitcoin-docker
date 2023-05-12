@@ -60,9 +60,7 @@ RUN set -ex \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz *.asc \
   && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt \
-  && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/test-bitcoin \
-  && ls -lh /opt/bitcoin-${BITCOIN_VERSION}/bin \
-  && ls -lh /opt/bitcoin-${BITCOIN_VERSION} 
+  && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/test_bitcoin
   
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
