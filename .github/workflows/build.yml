@@ -12,7 +12,6 @@ on:
       - '.dockerignore'
       - '.github/**'
       - '.github/workflows/**'
-      - 'Dockerfile'
 
 jobs:
   build:
@@ -32,7 +31,6 @@ jobs:
         id: prepare
         run: |
           TARGET_VERSION=$(grep --only-matching --perl-regex "(?<=BITCOIN_VERSION\=).*" ./Dockerfile)
-          echo ${TARGET_VERSION}
           REPO=${{ github.repository }}
           PUSH=true
           TAGS=()
@@ -44,7 +42,6 @@ jobs:
 
           echo ::set-output name=build_date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           echo ::set-output name=docker_platforms::${PLATFORMS}
-          echo ::set-output name=docker_username::${{ secrets.DOCKER_USER }}
           echo ::set-output name=push::${PUSH}
           echo ::set-output name=tags::${TAGS[@]}
           echo ::set-output name=version::${TARGET_VERSION}
