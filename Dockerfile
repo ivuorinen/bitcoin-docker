@@ -59,7 +59,7 @@ RUN set -ex \
   && grep " bitcoin-${BITCOIN_VERSION}-${TARGETPLATFORM}.tar.gz" SHA256SUMS | sha256sum -c - \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz *.asc \
-  && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt
+  && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt \
   && strip -v /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin"*
 
 COPY entrypoint.sh /entrypoint.sh
