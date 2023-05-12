@@ -32,7 +32,13 @@ services:
 Via `docker run`
 
 ```bash
-docker run -it --rm -p 8333:8333 kroese/docker-bitcoin:latest -printtoconsole
+docker run -it --rm kroese/docker-bitcoin:latest -printtoconsole
+```
+
+Executing `getinfo` on a running container:
+
+```bash
+docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
 ```
 
 [build_url]: https://github.com/kroese/docker-bitcoin/
