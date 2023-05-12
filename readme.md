@@ -43,4 +43,4 @@ docker run -it --rm -p 8332:8332 -p 8333:8333 kroese/docker-bitcoin:latest -prin
 [Build]: https://github.com/kroese/docker-bitcoin/actions/workflows/build.yml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/kroese/docker-bitcoin/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/kroese/docker-bitcoin.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/kroese/docker-bitcoin?arch=amd64&sort=date&color=066da5
+[Version]: https://img.shields.io/docker/v/kroese/docker-bitcoin?arch=amd64&sort=semver&color=066da5
