@@ -27,13 +27,12 @@ services:
     volumes:
       - /opt/bitcoin:/home/bitcoin/.bitcoin
     restart: on-failure
-    stop_grace_period: 1m
 ```
 
 Via `docker run`
 
 ```bash
-docker run -it --rm -p 8332:8332 -p 8333:8333 kroese/docker-bitcoin:latest -printtoconsole
+docker run -it --rm -p 8333:8333 kroese/docker-bitcoin:latest -printtoconsole
 ```
 
 [build_url]: https://github.com/kroese/docker-bitcoin/
