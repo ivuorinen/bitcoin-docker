@@ -13,6 +13,8 @@ RUN groupadd --gid ${GID} bitcoin \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG BUILD_RUN=0
+ARG BUILD_DATE=""
 ARG TARGETVERSION
 ARG TARGETPLATFORM
 
@@ -20,6 +22,8 @@ ENV BITCOIN_VERSION=${TARGETVERSION}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_VERSION}/bin:$PATH
 
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+LABEL org.opencontainers.image.revision=${BUILD_RUN}
 LABEL org.opencontainers.image.version=${TARGETVERSION}
 LABEL org.opencontainers.image.source=https://github.com/kroese/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/kroese/docker-bitcoin/
