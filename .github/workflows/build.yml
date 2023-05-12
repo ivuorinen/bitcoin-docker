@@ -46,6 +46,7 @@ jobs:
           echo ::set-output name=docker_username::${{ secrets.DOCKER_USER }}
           echo ::set-output name=push::${PUSH}
           echo ::set-output name=tags::${TAGS[@]}
+          echo ::set-output name=version::${BITCOIN_VERSION}
           echo ::set-output name=build::true
 
       - if: ${{ steps.prepare.outputs.build }} == 'true'
@@ -68,7 +69,7 @@ jobs:
           echo docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=${{steps.prepare.outputs.push}}" \
             --progress=plain \
-            --build-arg "TARGETVERSION=${BITCOIN_VERSION}" \
+            --build-arg "TARGETVERSION=${{ steps.prepare.outputs.version }}" \
             --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
@@ -77,7 +78,7 @@ jobs:
           docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=${{steps.prepare.outputs.push}}" \
             --progress=plain \
-            --build-arg "TARGETVERSION=${BITCOIN_VERSION}" \           
+            --build-arg "TARGETVERSION=${{ steps.prepare.outputs.version }}" \
             --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
