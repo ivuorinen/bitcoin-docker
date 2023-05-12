@@ -2,7 +2,7 @@ version: "3"
 services:
   bitcoin:
     container_name: bitcoin
-    image: kroese/docker-bitcoin:latest
+    image: docker-bitcoin/docker-bitcoin:latest
     ports:
       - 8332:8332
       - 8333:8333
