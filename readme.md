@@ -20,7 +20,7 @@ version: "3"
 services:
   bitcoin:
     container_name: bitcoin
-    image: kroese/docker-bitcoin:latest
+    image: docker-bitcoin/docker-bitcoin:latest
     ports:
       - 8332:8332
       - 8333:8333
@@ -32,7 +32,7 @@ services:
 Via `docker run`
 
 ```bash
-docker run -it --rm kroese/docker-bitcoin:latest -printtoconsole
+docker run -it --rm docker-bitcoin/docker-bitcoin:latest -printtoconsole
 ```
 
 Executing `getinfo` on a running container:
@@ -41,11 +41,11 @@ Executing `getinfo` on a running container:
 docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
 ```
 
-[build_url]: https://github.com/kroese/docker-bitcoin/
-[hub_url]: https://hub.docker.com/r/kroese/docker-bitcoin
-[tag_url]: https://hub.docker.com/r/kroese/docker-bitcoin/tags
+[build_url]: https://github.com/docker-bitcoin/docker-bitcoin/
+[hub_url]: https://hub.docker.com/r/dockerbitcoin/docker-bitcoin
+[tag_url]: https://hub.docker.com/r/dockerbitcoin/docker-bitcoin/tags
 
-[Build]: https://github.com/kroese/docker-bitcoin/actions/workflows/build.yml/badge.svg
-[Size]: https://img.shields.io/docker/image-size/kroese/docker-bitcoin/latest?color=066da5&label=size
-[Pulls]: https://img.shields.io/docker/pulls/kroese/docker-bitcoin.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/kroese/docker-bitcoin?arch=amd64&sort=semver&color=066da5
+[Build]: https://github.com/docker-bitcoin/docker-bitcoin/actions/workflows/build.yml/badge.svg
+[Size]: https://img.shields.io/docker/image-size/dockerbitcoin/docker-bitcoin/latest?color=066da5&label=size
+[Pulls]: https://img.shields.io/docker/pulls/dockerbitcoin/docker-bitcoin.svg?style=flat&label=pulls&logo=docker
+[Version]: https://img.shields.io/docker/v/dockerbitcoin/docker-bitcoin?arch=amd64&sort=semver&color=066da5
