@@ -1,12 +1,26 @@
 name: Build
-on: [workflow_dispatch]
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.yml'      
+      - '.gitignore'
+      - '.dockerignore'
+      - '.github/**'
+      - '.github/workflows/**'
+      - 'Dockerfile'
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
+    permissions:
+      packages: write
+      contents: read    
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -24,6 +38,8 @@ jobs:
           TAGS=()
           TAGS=("$REPO:${BITCOIN_VERSION/\//-}")
           TAGS+=("$REPO:latest")
+          TAGS+=("ghcr.io/$REPO:${BITCOIN_VERSION/\//-}")
+          TAGS+=("ghcr.io/$REPO:latest")         
           PUSH=true
           PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
 
@@ -54,6 +70,7 @@ jobs:
           echo docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=${{steps.prepare.outputs.push}}" \
             --progress=plain \
+            --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
             $(printf "%s" "${TAGS[@]/#/ --tag }" ) .
@@ -61,6 +78,20 @@ jobs:
           docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=${{steps.prepare.outputs.push}}" \
             --progress=plain \
+            --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
             $(printf "%s" "${TAGS[@]/#/ --tag }" ) .
+
+      - if: ${{ steps.prepare.outputs.build }} == 'true'
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Push to Github Container Registry
+        run: |
+          docker push "ghcr.io/$REPO:${BITCOIN_VERSION/\//-}" && \
+          docker push "ghcr.io/$REPO:latest"
