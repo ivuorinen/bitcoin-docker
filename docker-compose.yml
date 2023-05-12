@@ -1,7 +1,12 @@
 version: "3"
 services:
-    bitcoin:
-        container_name: bitcoin
-        image: kroese/docker-bitcoin:latest
-        restart: on-failure
-        stop_grace_period: 1m
+  bitcoin:
+    container_name: bitcoin
+    image: kroese/docker-bitcoin:latest
+    ports:
+      - 8332:8332
+      - 8333:8333
+    volumes:
+      - /opt/bitcoin:/home/bitcoin/.bitcoin
+    restart: on-failure
+    stop_grace_period: 1m
