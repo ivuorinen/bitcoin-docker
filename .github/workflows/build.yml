@@ -31,24 +31,16 @@ jobs:
       - name: Prepare Docker build
         id: prepare
         run: |
+          PUSH=true
           BITCOIN_VERSION=24
           PLATFORMS="linux/amd64"
-          PUSH=false
           REPO=${{ github.repository }}
           TAGS=()
           TAGS=("$REPO:${BITCOIN_VERSION/\//-}")
           TAGS+=("$REPO:latest")
           TAGS+=("ghcr.io/$REPO:${BITCOIN_VERSION/\//-}")
           TAGS+=("ghcr.io/$REPO:latest")         
-          PUSH=true
           PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
-
-          echo ::set-output name=build_date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-          echo ::set-output name=docker_platforms::${PLATFORMS}
-          echo ::set-output name=docker_username::${{ secrets.DOCKER_USER }}
-          echo ::set-output name=push::${PUSH}
-          echo ::set-output name=tags::${TAGS[@]}
-          echo ::set-output name=build::true
 
       - if: ${{ steps.prepare.outputs.build }} == 'true'
         name: Login into Docker Hub
