@@ -60,13 +60,24 @@ RUN set -ex \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz *.asc \
   && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt
+  && strip -v /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin"*
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 VOLUME ["/home/bitcoin/.bitcoin"]
 
-EXPOSE 8332 8333 18332 18333 18443 18444 28332 28333 38333 38332
+# REST interface
+EXPOSE 8080
+
+# P2P network (mainnet, testnet & regnet respectively)
+EXPOSE 8333 18333 18444
+
+# RPC interface (mainnet, testnet & regnet respectively)
+EXPOSE 8332 18332 18443
+
+# ZMQ ports (for transactions & blocks respectively)
+EXPOSE 28332 28333
 
 ENTRYPOINT ["/entrypoint.sh"]
 
