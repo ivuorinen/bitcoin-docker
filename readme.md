@@ -20,7 +20,7 @@ version: "3"
 services:
   bitcoin:
     container_name: bitcoin
-    image: docker-bitcoin/docker-bitcoin:latest
+    image: dockerbitcoin/docker-bitcoin:latest
     ports:
       - 8332:8332
       - 8333:8333
@@ -32,7 +32,7 @@ services:
 Via `docker run`
 
 ```bash
-docker run -it --rm docker-bitcoin/docker-bitcoin:latest -printtoconsole
+docker run -it --rm dockerbitcoin/docker-bitcoin:latest -printtoconsole
 ```
 
 Executing `getinfo` on the running container:
