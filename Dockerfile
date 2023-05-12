@@ -3,17 +3,26 @@ FROM debian:bookworm-slim
 ARG UID=101
 ARG GID=101
 
+ARG DEBCONF_NOWARNINGS="yes"
+ARG DEBIAN_FRONTEND noninteractive
+
 RUN groupadd --gid ${GID} bitcoin \
   && useradd --create-home --no-log-init -u ${UID} -g ${GID} bitcoin \
   && apt-get update -y \
-  && apt-get install -y curl gnupg gosu \
+  && apt-get --no-install-recommends -y install curl gnupg gosu \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG TARGETPLATFORM
-ENV BITCOIN_VERSION=24.0.1
+ARG TARGETVERSION=24.0.1
+
+ENV BITCOIN_VERSION=${TARGETVERSION}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_VERSION}/bin:$PATH
+
+LABEL org.opencontainers.image.version=${TARGETVERSION}
+LABEL org.opencontainers.image.source=https://github.com/kroese/docker-bitcoin/
+LABEL org.opencontainers.image.url=https://hub.docker.com/r/kroese/docker-bitcoin/
 
 RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
@@ -49,7 +58,7 @@ RUN set -ex \
   && rm *.tar.gz *.asc \
   && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt
 
-COPY docker-entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 
 VOLUME ["/home/bitcoin/.bitcoin"]
 
