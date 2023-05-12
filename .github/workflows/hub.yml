@@ -17,8 +17,8 @@ jobs:
       name: Docker Hub Description
       uses: peter-evans/dockerhub-description@v3
       with:
-        username: ${{ secrets.DOCKERHUB_USER }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_TOKEN }}
         repository: ${{ github.repository }}
         short-description: ${{ github.event.repository.description }}
         readme-filepath: ./readme.md
