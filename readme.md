@@ -18,17 +18,22 @@ Via `docker-compose.yml`
 ```yaml
 version: "3"
 services:
-    bitcoin:
-        container_name: bitcoin
-        image: kroese/docker-bitcoin:latest
-        restart: on-failure
-        stop_grace_period: 1m
+  bitcoin:
+    container_name: bitcoin
+    image: kroese/docker-bitcoin:latest
+    ports:
+      - 8332:8332
+      - 8333:8333
+    volumes:
+      - /opt/bitcoin:/home/bitcoin/.bitcoin
+    restart: on-failure
+    stop_grace_period: 1m
 ```
 
 Via `docker run`
 
 ```bash
-docker run -it --rm --stop-timeout 60 kroese/docker-bitcoin:latest
+docker run -it --rm -p 8332:8332 -p 8333:8333 kroese/docker-bitcoin:latest -printtoconsole
 ```
 
 [build_url]: https://github.com/kroese/docker-bitcoin/
