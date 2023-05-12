@@ -19,6 +19,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_TOKEN }}
-        repository: ${{ github.repository }}
+        repository: dockerbitcoin/docker-bitcoin
         short-description: ${{ github.event.repository.description }}
         readme-filepath: ./readme.md
