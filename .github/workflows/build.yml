@@ -32,7 +32,7 @@ jobs:
         id: prepare
         run: |
           PUSH=true
-          BITCOIN_VERSION=24
+          BITCOIN_VERSION=24.33
           PLATFORMS="linux/amd64"
           REPO=${{ github.repository }}
           TAGS=()
@@ -62,6 +62,7 @@ jobs:
           echo docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=${{steps.prepare.outputs.push}}" \
             --progress=plain \
+            --build-arg "TARGETVERSION=${BITCOIN_VERSION}" \
             --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
@@ -70,6 +71,7 @@ jobs:
           docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=${{steps.prepare.outputs.push}}" \
             --progress=plain \
+            --build-arg "TARGETVERSION=${BITCOIN_VERSION}" \           
             --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
