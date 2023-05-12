@@ -3,12 +3,13 @@ on: [workflow_dispatch]
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
       - name: Set up Docker Buildx
-        uses: crazy-max/ghaction-docker-buildx@v3
+        uses: docker/setup-buildx-action@v1
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -16,25 +17,14 @@ jobs:
       - name: Prepare Docker build
         id: prepare
         run: |
-          function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
-
           BITCOIN_VERSION=24
-          LATEST_BITCOIN_MAJOR_VERSION=$(find . -type d -maxdepth 1 -not -path '*/\.*' | sort -n | tail -n 1 | cut -c 3-)
           PLATFORMS="linux/amd64"
           PUSH=false
           REPO=${{ github.repository }}
           TAGS=()
           TAGS=("$REPO:${BITCOIN_VERSION/\//-}")
-
-          if [ $(version ${BITCOIN_VERSION}) -ge $(version ${LATEST_BITCOIN_MAJOR_VERSION}) ]; then
-            echo "Version $(version ${BITCOIN_VERSION}) is greater than or equal to $(version ${LATEST_BITCOIN_MAJOR_VERSION}), tagging as latest"
-            TAGS+=("$REPO:latest")
-          fi
-
-          if [ $GITHUB_REF == "refs/heads/master" ]; then
-            PUSH=true
-          fi
-
+          TAGS+=("$REPO:latest")
+          PUSH=true
           PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
 
           echo ::set-output name=build_date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
