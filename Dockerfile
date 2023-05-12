@@ -9,7 +9,7 @@ ARG DEBIAN_FRONTEND noninteractive
 RUN groupadd --gid ${GID} bitcoin \
   && useradd --create-home --no-log-init -u ${UID} -g ${GID} bitcoin \
   && apt-get update -y \
-  && apt-get --no-install-recommends -y install curl gnupg gosu \
+  && apt-get --no-install-recommends -y install curl gnupg gosu ca-certificates \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
