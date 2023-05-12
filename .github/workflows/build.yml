@@ -32,7 +32,7 @@ jobs:
         id: prepare
         run: |
           PUSH=true
-          BITCOIN_VERSION=24.33
+          BITCOIN_VERSION=24.0.1
           REPO=${{ github.repository }}
           TAGS=()
           TAGS=("$REPO:${BITCOIN_VERSION/\//-}")
