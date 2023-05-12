@@ -15,16 +15,15 @@ RUN groupadd --gid ${GID} bitcoin \
 
 ARG BUILD_RUN=0
 ARG BUILD_DATE=""
-ARG TARGETVERSION
 ARG TARGETPLATFORM
 
-ENV BITCOIN_VERSION=${TARGETVERSION}
+ENV BITCOIN_VERSION=24.0.1
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_VERSION}/bin:$PATH
 
 LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
-LABEL org.opencontainers.image.version=${TARGETVERSION}
+LABEL org.opencontainers.image.version=${BITCOIN_VERSION}
 LABEL org.opencontainers.image.source=https://github.com/kroese/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/kroese/docker-bitcoin/
 
