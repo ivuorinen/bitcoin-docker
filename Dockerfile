@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim
 
-ARG UID=101
-ARG GID=101
+ARG UID=1001
+ARG GID=1001
 
 ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND noninteractive
@@ -60,8 +60,10 @@ RUN set -ex \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz *.asc \
   && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt \
-  && strip -v /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin*
-
+  && ls -lh /opt/bitcoin-${BITCOIN_VERSION}/bin \
+  && strip -v /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin* \
+  && ls -lh /opt/bitcoin-${BITCOIN_VERSION}/bin
+  
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
