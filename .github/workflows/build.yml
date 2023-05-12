@@ -31,13 +31,12 @@ jobs:
         id: prepare
         run: |
           TARGET_VERSION=$(grep --only-matching --perl-regex "(?<=BITCOIN_VERSION\=).*" ./Dockerfile)
-          REPO=${{ github.repository }}
           PUSH=true
           TAGS=()
-          TAGS=("$REPO:${TARGET_VERSION/\//-}")
-          TAGS+=("$REPO:latest")
-          TAGS+=("ghcr.io/$REPO:${TARGET_VERSION/\//-}")
-          TAGS+=("ghcr.io/$REPO:latest")
+          TAGS=("${{ secrets.DOCKER_USER }}/${{ github.event.repository.name }}:${TARGET_VERSION/\//-}")
+          TAGS+=("${{ secrets.DOCKER_USER }}/${{ github.event.repository.name }}:latest")
+          TAGS+=("ghcr.io/${{ github.repository }}:${TARGET_VERSION/\//-}")
+          TAGS+=("ghcr.io/${{ github.repository }}:latest")
           PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
 
           echo ::set-output name=build_date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
