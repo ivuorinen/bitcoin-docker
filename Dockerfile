@@ -19,7 +19,6 @@ ARG TARGETPLATFORM
 
 ENV BITCOIN_VERSION=24.0.1
 ENV BITCOIN_RC=
-ARG BITCOIN_SUBDIR=
 ARG BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
@@ -31,7 +30,8 @@ LABEL org.opencontainers.image.source=https://github.com/dobtc/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/dobtc/docker-bitcoin/
 
 RUN set -ex \
-  && if [ -n "${BITCOIN_RC}" ]; then export BITCOIN_SUBDIR=/test.; fi \
+  && if [ -n "${BITCOIN_RC}" ]; then export SUBDIR=/test.; else export SUBDIR=; fi \
+  && export URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${SUBDIR}${BITCOIN_RC} \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm/v7" ]; then export TARGETPLATFORM=arm-linux-gnueabihf; fi \
@@ -56,9 +56,9 @@ RUN set -ex \
   gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
   gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done \
-  && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${BITCOIN_SUBDIR}${BITCOIN_RC}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
-  && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${BITCOIN_SUBDIR}${BITCOIN_RC}/SHA256SUMS \
-  && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${BITCOIN_SUBDIR}${BITCOIN_RC}/SHA256SUMS.asc \
+  && curl -SLO ${URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
+  && curl -SLO ${URL}/SHA256SUMS \
+  && curl -SLO ${URL}/SHA256SUMS.asc \
   && gpg --verify SHA256SUMS.asc SHA256SUMS \
   && grep " bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz" SHA256SUMS | sha256sum -c - \
   && tar -xzf *.tar.gz -C /opt \
