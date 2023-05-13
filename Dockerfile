@@ -17,11 +17,13 @@ ARG BUILD_RUN=0
 ARG BUILD_DATE=""
 ARG TARGETPLATFORM
 
-ENV BITCOIN_VERSION=24.0.1
-ENV BITCOIN_DIR=${BITCOIN_VERSION}
-ENV BITCOIN_URL=${BITCOIN_VERSION}
+ENV BITCOIN_VERSION=24.1
+ENV BITCOIN_BUILD=rc3
+ENV BITCOIN_TEST=/test.
+ENV BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_BUILD}
+ENV BITCOIN_URL=${BITCOIN_VERSION}${BITCOIN_TEST}${BITCOIN_BUILD}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
-ENV PATH=/opt/bitcoin-${BITCOIN_DIR}/bin:$PATH
+ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
 LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
@@ -54,15 +56,15 @@ RUN set -ex \
   gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
   gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done \
-  && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/bitcoin-${BITCOIN_DIR}-${TARGETPLATFORM}.tar.gz \
+  && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
   && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/SHA256SUMS \
   && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/SHA256SUMS.asc \
   && gpg --verify SHA256SUMS.asc SHA256SUMS \
   && grep " bitcoin-${BITCOIN_DIR}-${TARGETPLATFORM}.tar.gz" SHA256SUMS | sha256sum -c - \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz *.asc \
-  && rm -rf /opt/bitcoin-${BITCOIN_DIR}/bin/bitcoin-qt \
-  && rm -rf /opt/bitcoin-${BITCOIN_DIR}/bin/test_bitcoin
+  && rm -rf /opt/bitcoin-${BITCOIN_BASE}/bin/bitcoin-qt \
+  && rm -rf /opt/bitcoin-${BITCOIN_BASE}/bin/test_bitcoin
   
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
