@@ -60,7 +60,7 @@ RUN set -ex \
   && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/SHA256SUMS \
   && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/SHA256SUMS.asc \
   && gpg --verify SHA256SUMS.asc SHA256SUMS \
-  && grep " bitcoin-${BITCOIN_DIR}-${TARGETPLATFORM}.tar.gz" SHA256SUMS | sha256sum -c - \
+  && grep " bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz" SHA256SUMS | sha256sum -c - \
   && tar -xzf *.tar.gz -C /opt \
   && rm *.tar.gz *.asc \
   && rm -rf /opt/bitcoin-${BITCOIN_BASE}/bin/bitcoin-qt \
