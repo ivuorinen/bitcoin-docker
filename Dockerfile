@@ -19,8 +19,8 @@ ARG TARGETPLATFORM
 
 ENV BITCOIN_VERSION=24.1
 ENV BITCOIN_RC=rc3
-ENV BITCOIN_SUBDIR=
-ENV BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
+ARG BITCOIN_SUBDIR=
+ARG BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
@@ -31,7 +31,7 @@ LABEL org.opencontainers.image.source=https://github.com/dobtc/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/dobtc/docker-bitcoin/
 
 RUN set -ex \
-  && if [ "${BITCOIN_RC}" != "" ]; then export BITCOIN_SUBDIR=/test.; fi \
+  && if [ -n "${BITCOIN_RC}" ]; then export BITCOIN_SUBDIR=/test.; fi \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm/v7" ]; then export TARGETPLATFORM=arm-linux-gnueabihf; fi \
