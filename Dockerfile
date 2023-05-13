@@ -83,6 +83,6 @@ EXPOSE 28332 28333
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-RUN bitcoind -version | grep "Bitcoin Core version v${BITCOIN_VERSION}${BITCOIN_RC}"
+RUN bitcoind -version | grep "Bitcoin Core version v${BITCOIN_VERSION}"
 
 CMD ["bitcoind"]
