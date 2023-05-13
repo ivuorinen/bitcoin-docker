@@ -18,20 +18,21 @@ ARG BUILD_DATE=""
 ARG TARGETPLATFORM
 
 ENV BITCOIN_VERSION=24.1
-ENV BITCOIN_BUILD=rc3
-ENV BITCOIN_TEST=/test.
-ENV BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_BUILD}
-ENV BITCOIN_URL=${BITCOIN_VERSION}${BITCOIN_TEST}${BITCOIN_BUILD}
+ENV BITCOIN_RC=rc3
+
+ENV BITCOIN_SUBDIR=
+RUN if [ "${BITCOIN_RC}" != "" ]; then export BITCOIN_SUBDIR=/test.
+  
+ENV BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
+ENV BITCOIN_URL=${BITCOIN_VERSION}${BITCOIN_SUBDIR}${BITCOIN_RC}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
 LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
-LABEL org.opencontainers.image.version=${BITCOIN_VERSION}
+LABEL org.opencontainers.image.version=${BITCOIN_VERSION}${BITCOIN_RC}
 LABEL org.opencontainers.image.source=https://github.com/dobtc/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/dobtc/docker-bitcoin/
-
-RUN echo "https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz"
 
 RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
@@ -58,6 +59,7 @@ RUN set -ex \
   gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
   gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done \
+  && echo "https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz" \
   && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
   && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/SHA256SUMS \
   && curl -SLO https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/SHA256SUMS.asc \
@@ -87,6 +89,6 @@ EXPOSE 28332 28333
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-RUN bitcoind -version | grep "Bitcoin Core version v${BITCOIN_VERSION}"
+RUN bitcoind -version | grep "Bitcoin Core version v${BITCOIN_VERSION}${BITCOIN_RC}"
 
 CMD ["bitcoind"]
