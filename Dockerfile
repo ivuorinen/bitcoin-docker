@@ -25,7 +25,7 @@ ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
 LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
-LABEL org.opencontainers.image.version=${BITCOIN_VERSION}${BITCOIN_RC}
+LABEL org.opencontainers.image.version=${BITCOIN_BASE}
 LABEL org.opencontainers.image.source=https://github.com/dobtc/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/dobtc/docker-bitcoin/
 
