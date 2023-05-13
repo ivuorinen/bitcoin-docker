@@ -31,6 +31,8 @@ LABEL org.opencontainers.image.version=${BITCOIN_VERSION}
 LABEL org.opencontainers.image.source=https://github.com/dobtc/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/dobtc/docker-bitcoin/
 
+RUN echo "https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz"
+
 RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
