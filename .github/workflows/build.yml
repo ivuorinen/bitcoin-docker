@@ -30,7 +30,8 @@ jobs:
       - name: Prepare Docker build
         id: prepare
         run: |
-          TARGET_VERSION=$(grep --only-matching --perl-regex "(?<=BITCOIN_BASE\=).*" ./Dockerfile)
+          TARGET_VERSION=$(grep --only-matching --perl-regex "(?<=BITCOIN_VERSION\=).*" ./Dockerfile)
+          TARGET_VERSION=$TARGET_VERSION$(grep --only-matching --perl-regex "(?<=BITCOIN_BUILD\=).*" ./Dockerfile)
           PUSH=true
           TAGS=()
           TAGS=("${{ github.repository }}:${TARGET_VERSION/\//-}")
