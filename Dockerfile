@@ -29,6 +29,7 @@ LABEL org.opencontainers.image.version=${BITCOIN_BASE}
 LABEL org.opencontainers.image.source=https://github.com/dobtc/docker-bitcoin/
 LABEL org.opencontainers.image.url=https://hub.docker.com/r/dobtc/docker-bitcoin/
 
+SHELL ["/bin/bash", "-c"]
 RUN set -ex \
   && if [ -n "${BITCOIN_RC}" ]; then export SUBDIR=/test.; else export SUBDIR=; fi \
   && export URL="https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${SUBDIR}${BITCOIN_RC}" \
