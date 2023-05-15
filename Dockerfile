@@ -31,24 +31,23 @@ LABEL org.opencontainers.image.url=https://hub.docker.com/r/dobtc/docker-bitcoin
 
 RUN set -ex \
   && if [ -n "${BITCOIN_RC}" ]; then export SUBDIR=/test.; else export SUBDIR=; fi \
-  && export URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${SUBDIR}${BITCOIN_RC} \
+  && export URL="https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${SUBDIR}${BITCOIN_RC}" \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm/v7" ]; then export TARGETPLATFORM=arm-linux-gnueabihf; fi \
-  && KEY_LIST=$(curl -sS "https://api.github.com/repos/bitcoin-core/guix.sigs/contents/builder-keys" | jq -r '.[].download_url' |tr "\n" " ") \
-  && KEYS=(`echo ${KEY_LIST}`) \
+  && KEYS=($(curl -sS "https://api.github.com/repos/bitcoin-core/guix.sigs/contents/builder-keys" | jq -r '.[].download_url' |tr "\n" " ")) \
   && for key in "${KEYS[@]}"; do \
-  echo $key; \
-  done \ 
-  && curl -SLO ${URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
-  && curl -SLO ${URL}/SHA256SUMS \
-  && curl -SLO ${URL}/SHA256SUMS.asc \
+  echo "$key" ; \
+  done \
+  && curl -SLO "${URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz" \
+  && curl -SLO "${URL}/SHA256SUMS" \
+  && curl -SLO "${URL}/SHA256SUMS.asc" \
   && gpg --verify SHA256SUMS.asc SHA256SUMS \
   && grep " bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz" SHA256SUMS | sha256sum -c - \
-  && tar -xzf *.tar.gz -C /opt \
-  && rm *.tar.gz *.asc \
-  && rm -rf /opt/bitcoin-${BITCOIN_BASE}/bin/bitcoin-qt \
-  && rm -rf /opt/bitcoin-${BITCOIN_BASE}/bin/test_bitcoin
+  && tar -xzf ./*.tar.gz -C /opt \
+  && rm ./*.tar.gz ./*.asc \
+  && rm -rf "/opt/bitcoin-${BITCOIN_BASE}/bin/bitcoin-qt" \
+  && rm -rf "/opt/bitcoin-${BITCOIN_BASE}/bin/test_bitcoin"
   
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
