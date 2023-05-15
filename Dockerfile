@@ -22,7 +22,6 @@ ENV BITCOIN_RC=rc2
 ARG BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
-ARG KEY_URL=https://raw.githubusercontent.com/bitcoin-core/guix.sigs/main/builder-keys
 
 LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
@@ -36,28 +35,10 @@ RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm/v7" ]; then export TARGETPLATFORM=arm-linux-gnueabihf; fi \
-  && curl -sSL ${KEY_URL}/CoinForensics.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/Emzy.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/Sjors.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/TheCharlatan.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/achow101.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/benthecarman.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/cfields.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/darosior.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/dunxen.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/fanquake.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/glozow.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/guggero.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/hebasto.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/jackielove4u.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/josibake.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/laanwj.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/satsie.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/sipa.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/svanstaa.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/theStack.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/vertiond.gpg | gpg --import - \
-  && curl -sSL ${KEY_URL}/willyko.gpg | gpg --import - \ 
+  && KEYS=($(curl -sS "https://api.github.com/repos/bitcoin-core/guix.sigs/contents/builder-keys" | jq -r '.[].download_url' |tr "\n" " ")) \
+  && for key in "${KEYS[@]}"; do \
+  echo $key; \
+  done \ 
   && curl -SLO ${URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
   && curl -SLO ${URL}/SHA256SUMS \
   && curl -SLO ${URL}/SHA256SUMS.asc \
