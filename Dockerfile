@@ -37,49 +37,27 @@ RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm/v7" ]; then export TARGETPLATFORM=arm-linux-gnueabihf; fi \
   && curl -sSL ${KEY_URL}/CoinForensics.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/Emzy.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/Sjors.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/TheCharlatan.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/achow101.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/benthecarman.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/cfields.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/darosior.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/dunxen.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/fanquake.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/glozow.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/guggero.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/hebasto.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/jackielove4u.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/josibake.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/laanwj.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/satsie.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/sipa.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/svanstaa.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/theStack.gpg | gpg --import - && \
-
   && curl -sSL ${KEY_URL}/vertiond.gpg | gpg --import - && \
-
-  && curl -sSL ${KEY_URL}/willyko.gpg | gpg --import - && \
-
+  && curl -sSL ${KEY_URL}/willyko.gpg | gpg --import - && \ 
   && curl -SLO ${URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
   && curl -SLO ${URL}/SHA256SUMS \
   && curl -SLO ${URL}/SHA256SUMS.asc \
