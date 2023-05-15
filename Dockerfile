@@ -22,6 +22,7 @@ ENV BITCOIN_RC=rc2
 ARG BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
+ARG KEY_URL=https://raw.githubusercontent.com/bitcoin-core/guix.sigs/main/builder-keys
 
 LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
@@ -35,27 +36,50 @@ RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm/v7" ]; then export TARGETPLATFORM=arm-linux-gnueabihf; fi \
-  && for key in \
-  152812300785C96444D3334D17565732E08E5E41 \
-  0AD83877C1F0CD1EE9BD660AD7CC770B81FD22A8 \
-  590B7292695AFFA5B672CBB2E13FC145CD3F4304 \
-  CFB16E21C950F67FA95E558F2EEB9F5CC09526C1 \
-  F4FC70F07310028424EFC20A8E4256593F177720 \
-  D1DBF2C4B96F2DEBF4C16654410108112E7EA81F \
-  287AE4CA1187C68C08B49CB2D11BD4F33F1DB499 \
-  9DEAE0DC7063249FB05474681E4AED62986CD25D \
-  3EB0DEE6004A13BE5A0CC758BF2978B068054311 \
-  ED9BDF7AD6A55E232E84524257FF9BDBCC301009 \
-  28E72909F1717FE9607754F8A7BEB2621678D37D \
-  79D00BAC68B56D422F945A8F8E3A8F3247DBCBBF \
-  ; do \
-  gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
-  gpg --batch --keyserver keys.openpgp.org --recv-keys "$key" || \
-  gpg --batch --keyserver pgp.mit.edu --recv-keys "$key" || \
-  gpg --batch --keyserver keyserver.pgp.com --recv-keys "$key" || \
-  gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
-  gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
-  done \
+  && curl -sSL ${KEY_URL}/CoinForensics.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/Emzy.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/Sjors.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/TheCharlatan.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/achow101.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/benthecarman.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/cfields.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/darosior.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/dunxen.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/fanquake.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/glozow.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/guggero.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/hebasto.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/jackielove4u.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/josibake.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/laanwj.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/satsie.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/sipa.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/svanstaa.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/theStack.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/vertiond.gpg | gpg --import - && \
+
+  && curl -sSL ${KEY_URL}/willyko.gpg | gpg --import - && \
+
   && curl -SLO ${URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz \
   && curl -SLO ${URL}/SHA256SUMS \
   && curl -SLO ${URL}/SHA256SUMS.asc \
