@@ -36,9 +36,9 @@ RUN set -ex \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm/v7" ]; then export TARGETPLATFORM=arm-linux-gnueabihf; fi \
-  && KEYS=($(curl -sS "https://api.github.com/repos/bitcoin-core/guix.sigs/contents/builder-keys" | jq -r '.[].download_url' |tr "\n" " ")) \
-  && for key in "${KEYS[@]}"; do \
-  curl -sSL "${key}" | gpg --import - ; \
+  && SIGNERS=($(curl -sS "https://api.github.com/repos/bitcoin-core/guix.sigs/contents/${BITCOIN_BASE}" | jq -r '.[] | select(.type=="dir") | .name' | tr "\n" " ")) \
+  && for name in "${SIGNERS[@]}"; do \
+  curl -sSL "https://raw.githubusercontent.com/bitcoin-core/guix.sigs/main/builder-keys/${name}.gpg" | gpg --import - ; \
   done \
   && curl -SLO "${URL}/bitcoin-${BITCOIN_BASE}-${TARGETPLATFORM}.tar.gz" \
   && curl -SLO "${URL}/SHA256SUMS" \
