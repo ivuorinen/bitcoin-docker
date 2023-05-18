@@ -89,8 +89,7 @@ jobs:
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
             $(printf "%s" "${TAGS[@]/#/ --tag }" ) .
 
-      -
-        name: Create a release
+      - name: Create a release
         uses: action-pack/github-release@v6
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -98,4 +97,3 @@ jobs:
           tag: "${{ TARGET_VERSION }}"
           title: "${{ TARGET_VERSION }}"
           body: "Release ${{ TARGET_VERSION }}"
-    
