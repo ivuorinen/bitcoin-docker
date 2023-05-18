@@ -94,6 +94,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
         with:
-          tag: "${{ TARGET_VERSION }}"
-          title: "${{ TARGET_VERSION }}"
-          body: "Release ${{ TARGET_VERSION }}"
+          tag: "${{ steps.prepare.outputs.version }}"
+          title: "${{ steps.prepare.outputs.version }}"
+          body: "Release ${{ steps.prepare.outputs.version }}"
