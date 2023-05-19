@@ -95,7 +95,7 @@ jobs:
           rm -f ${HOME}/.docker/config.json
           
       - name: Create a release
-        uses: action-pack/github-release@v6
+        uses: action-pack/github-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
         with:
