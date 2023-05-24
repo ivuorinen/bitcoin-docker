@@ -120,4 +120,9 @@ jobs:
         with:
           tag: "${{ steps.prepare.outputs.version }}"
           title: "${{ steps.prepare.outputs.version }}"
-          body: "${{ steps.changelog.outputs.changes }}"
+          body: |
+            ## Changelog :eyes:
+
+            ${{ steps.changelog.outputs.changes }}
+
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare//${{ env.previousTag }}...v${{ steps.prepare.outputs.version }}
