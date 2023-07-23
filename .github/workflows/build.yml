@@ -36,6 +36,7 @@ jobs:
           
           TARGET_RC=$(grep --only-matching --perl-regex "(?<=BITCOIN_RC\=).*" ./Dockerfile)
           TARGET_VERSION=$(grep --only-matching --perl-regex "(?<=BITCOIN_VERSION\=).*" ./Dockerfile)
+          TARGET_VERSION=$(echo "${TARGET_VERSION}" | xargs)
           [ -n "$TARGET_RC" ] && TARGET_VERSION=$TARGET_VERSION$TARGET_RC
           
           TAGS=()
