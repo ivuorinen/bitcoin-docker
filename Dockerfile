@@ -23,8 +23,8 @@ ARG BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
-LABEL org.opencontainers.image.title="Bitcoin"
 LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.title="Bitcoin Core"
 LABEL org.opencontainers.image.created=${BUILD_DATE}
 LABEL org.opencontainers.image.revision=${BUILD_RUN}
 LABEL org.opencontainers.image.version=${BITCOIN_BASE}
