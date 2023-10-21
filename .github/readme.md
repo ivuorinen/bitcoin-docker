@@ -1,9 +1,15 @@
-# docker-bitcoin
+<h1 align="center">Docker Bitcoin<br />
+<div align="center">
+<img src="https://avatars.githubusercontent.com/u/133400625?s=200&v=4" title="Logo" style="max-width:100%;" width="128" />
+</div>
+<div align="center">
 
 [![Build]][build_url]
 [![Version]][tag_url]
 [![Size]][tag_url]
 [![Pulls]][hub_url]
+
+</div></h1>
 
 A docker image of Bitcoin Core with support for the following platforms:
 
