@@ -94,7 +94,7 @@ jobs:
           
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
           
-          latest_release=$(curl -s https://api.github.com/repos/bitcoin/bitcoin/releases/latest | jq -r 'first(.[].tag_name | select(test("^v[0-9]")))')
+          latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
           echo "Official release is: $latest_release, target release is: $TARGET_BASE"
           
