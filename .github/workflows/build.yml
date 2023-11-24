@@ -54,8 +54,10 @@ jobs:
           if echo "${dockerhub_tags}" | grep -qx "${{ env.latest_tag }}"; then
             echo "exists=true" >> $GITHUB_ENV
           else
-            url="https://bitcoincore.org/bin/bitcoin-core-26.0/test.rc3/"
-            echo "Check if $url exists.."
+            loc="${{ env.latest_tag }}"
+            loc="${loc//rc/\/test.}"
+            url="https://bitcoincore.org/bin/bitcoin-core-${loc}/"
+            echo "Checking if $url exists.."
             curl -I 2>/dev/null $url | head -1 | grep 404 >/dev/null
             if [ $? == 0 ] ; then
               echo "exists=true" >> $GITHUB_ENV
@@ -78,22 +80,27 @@ jobs:
         if: env.exists == 'false'
         id: prepare
         run: |
+          #!/bin/bash
+          latest_release=$(curl -s https://api.github.com/repos/neovim/neovim/releases | jq -r 'first(.[].tag_name | select(test("^v[0-9]")))')
+          echo "Official release is: $latest_release"
           
           TARGET_RC=$(grep --only-matching --perl-regex "(?<=BITCOIN_RC\=).*" ./Dockerfile)
           TARGET_VERSION=$(grep --only-matching --perl-regex "(?<=BITCOIN_VERSION\=).*" ./Dockerfile)
-          TARGET_VERSION=$(echo "${TARGET_VERSION}" | xargs)
-          [ -n "$TARGET_RC" ] && TARGET_VERSION=$TARGET_VERSION$TARGET_RC
+
+          TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
           
           TAGS=()
-          TAGS=("${{ github.repository }}:${TARGET_VERSION/\//-}")
-          [ -z "$TARGET_RC" ] && TAGS+=("${{ github.repository }}:latest")
-          TAGS+=("ghcr.io/${{ github.repository }}:${TARGET_VERSION/\//-}")
-          [ -z "$TARGET_RC" ] && TAGS+=("ghcr.io/${{ github.repository }}:latest")
+          TAGS=("${{ github.repository }}:${TARGET_BASE}")
+          [[ "${TARGET_BASE}" == "$latest_release" ]] && TAGS+=("${{ github.repository }}:latest")
+          TAGS+=("ghcr.io/${{ github.repository }}:${TARGET_BASE}")
+          [[ "${TARGET_BASE}" == "$latest_release" ]] && TAGS+=("ghcr.io/${{ github.repository }}:latest")
 
           PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
           
           echo "tags=${TAGS[@]}" >> $GITHUB_OUTPUT
-          echo "version=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+          echo "rc=${TARGET_RC}" >> $GITHUB_OUTPUT
+          echo "major=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+          echo "version=${TARGET_BASE}" >> $GITHUB_OUTPUT
           echo "docker_platforms=${PLATFORMS}" >> $GITHUB_OUTPUT
           echo "build_date=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
       -
@@ -125,6 +132,8 @@ jobs:
           docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=true" \
             --progress=plain \
+            --build-arg "BITCOIN_RC=${{ steps.prepare.outputs.rc }}" \
+            --build-arg "BITCOIN_VERSION=${{ steps.prepare.outputs.major }}" \           
             --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
