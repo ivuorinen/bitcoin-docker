@@ -58,7 +58,7 @@ jobs:
             loc="${{ env.latest_tag }}"
             loc="${loc//rc/\/test.rc}"
             url="https://bitcoincore.org/bin/bitcoin-core-${loc}/"
-            echo "Checking if $url exists.."
+            #echo "Checking if $url exists.."
             resp=$(curl -I 2>/dev/null $url | head -1)
             if echo $resp | grep 404 >/dev/null; then
               echo "exists=true" >> $GITHUB_ENV
