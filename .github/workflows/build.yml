@@ -42,7 +42,6 @@ jobs:
           latest_tag=$(echo '${{ steps.latest_tag.outputs.data }}' | jq '.repository.refs.edges[][].name' -r)
           [ -z "$latest_tag" ] && echo "Tag not found!" && exit 1
           [[ "$latest_tag" = v* ]] && latest_tag="${latest_tag:1}"
-          latest_tag="26.0rc2"
           echo "Found tag: \"${latest_tag}\""
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
       - 
