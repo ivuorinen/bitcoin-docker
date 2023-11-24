@@ -55,7 +55,7 @@ jobs:
             echo "exists=true" >> $GITHUB_ENV
           else
             loc="${{ env.latest_tag }}"
-            loc="${loc//rc/\/test.}"
+            loc="${loc//rc/\/test.rc}"
             url="https://bitcoincore.org/bin/bitcoin-core-${loc}/"
             echo "Checking if $url exists.."
             curl -I 2>/dev/null $url | head -1 | grep 404 >/dev/null
@@ -81,19 +81,26 @@ jobs:
         id: prepare
         run: |
           #!/bin/bash
-          latest_release=$(curl -s https://api.github.com/repos/neovim/neovim/releases | jq -r 'first(.[].tag_name | select(test("^v[0-9]")))')
-          echo "Official release is: $latest_release"
-          
-          TARGET_RC=$(grep --only-matching --perl-regex "(?<=BITCOIN_RC\=).*" ./Dockerfile)
-          TARGET_VERSION=$(grep --only-matching --perl-regex "(?<=BITCOIN_VERSION\=).*" ./Dockerfile)
 
+          TARGET_VERSION="${{ env.latest_tag }}"
+          TARGET_VERSION="${TARGET_VERSION%%rc*}"
+          
+          if [[ "${TARGET_VERSION}" != "${{ env.latest_tag }}" ]]; then
+            TARGET_RC="${{ env.latest_tag }}"
+            TARGET_POS=${#TARGET_VERSION}
+            TARGET_RC="${TARGET_RC:TARGET_POS}"
+          fi
+          
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
+          
+          latest_release=$(curl -s https://api.github.com/repos/neovim/neovim/releases | jq -r 'first(.[].tag_name | select(test("^v[0-9]")))')
+          echo "Official release is: $latest_release, target release is: $TARGET_BASE"
           
           TAGS=()
           TAGS=("${{ github.repository }}:${TARGET_BASE}")
-          [[ "${TARGET_BASE}" == "$latest_release" ]] && TAGS+=("${{ github.repository }}:latest")
+          [[ "${TARGET_BASE}" == "${latest_release}" ]] && TAGS+=("${{ github.repository }}:latest")
           TAGS+=("ghcr.io/${{ github.repository }}:${TARGET_BASE}")
-          [[ "${TARGET_BASE}" == "$latest_release" ]] && TAGS+=("ghcr.io/${{ github.repository }}:latest")
+          [[ "${TARGET_BASE}" == "${latest_release}" ]] && TAGS+=("ghcr.io/${{ github.repository }}:latest")
 
           PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
           
