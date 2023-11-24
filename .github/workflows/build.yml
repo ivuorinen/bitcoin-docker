@@ -141,6 +141,8 @@ jobs:
           docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=true" \
             --progress=plain \
+            --build-arg "BITCOIN_RC=${{ steps.prepare.outputs.rc }}" \
+            --build-arg "BITCOIN_VERSION=${{ steps.prepare.outputs.major }}" \            
             --build-arg "BUILD_RUN=${GITHUB_RUN_ID}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
