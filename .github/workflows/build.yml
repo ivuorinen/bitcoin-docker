@@ -52,6 +52,8 @@ jobs:
           [ -z "${{ env.latest_tag }}" ] && echo "exists=true" >> $GITHUB_ENV && exit 0
           dockerhub_tags=$(curl -s https://hub.docker.com/v2/repositories/${{ github.repository }}/tags | jq -r '.results[].name')
           if echo "${dockerhub_tags}" | grep -qx "${{ env.latest_tag }}"; then
+            echo "exists=true" >> $GITHUB_ENV
+          else
             url="https://bitcoincore.org/bin/bitcoin-core-26.0/test.rc3/"
             echo "Check if $url exists.."
             curl -I 2>/dev/null $url | head -1 | grep 404 >/dev/null
@@ -60,8 +62,6 @@ jobs:
             else
               echo "exists=false" >> $GITHUB_ENV
             fi
-          else
-            echo "exists=false" >> $GITHUB_ENV
           fi
       - 
         name: Set up Docker Buildx
