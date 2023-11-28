@@ -45,19 +45,22 @@ jobs:
           echo "Found tag: \"${latest_tag}\""
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
       - 
-        name: Check if the tag exists in DockerHub
-        id: check-tag
+        name: Check if the tag exists locally
+        uses: mukunku/tag-exists-action@v1.4.0
+        id: checkTag
+        with: 
+          tag: 'v${{ env.latest_tag }}'         
+      -
+        name: Finish when found
         run: |
           #!/bin/bash
-          [ -z "${{ env.latest_tag }}" ] && echo "exists=true" >> $GITHUB_ENV && exit 0
-          dockerhub_tags=$(curl -s https://hub.docker.com/v2/repositories/${{ github.repository }}/tags | jq -r '.results[].name')
-          if echo "${dockerhub_tags}" | grep -qx "${{ env.latest_tag }}"; then
+          if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
             echo "exists=true" >> $GITHUB_ENV
           else
             loc="${{ env.latest_tag }}"
             loc="${loc//rc/\/test.rc}"
             url="https://bitcoincore.org/bin/bitcoin-core-${loc}/"
-            #echo "Checking if $url exists.."
+            echo "Checking if $url exists.."
             resp=$(curl -I 2>/dev/null $url | head -1)
             if echo $resp | grep 404 >/dev/null; then
               echo "exists=true" >> $GITHUB_ENV
@@ -65,16 +68,16 @@ jobs:
               echo "exists=false" >> $GITHUB_ENV
             fi
           fi
-      - 
-        name: Set up Docker Buildx
-        if: env.exists == 'false'
-        uses: docker/setup-buildx-action@v3
       -
         name: Checkout
         if: env.exists == 'false'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - 
+        name: Set up Docker Buildx
+        if: env.exists == 'false'
+        uses: docker/setup-buildx-action@v3          
       -
         name: Prepare Docker build
         if: env.exists == 'false'
