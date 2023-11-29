@@ -138,7 +138,8 @@ jobs:
           LABELS+=("org.opencontainers.image.revision=${GITHUB_RUN_ID}")
           LABELS+=("org.opencontainers.image.url=https://hub.docker.com/r/${{ github.repository }}")
           LABELS+=("org.opencontainers.image.source=https://github.com/${{ github.repository }}")
-          
+
+          cd "${DIRECTORY}"
           docker buildx build --progress=plain \
             --platform "${PLATFORMS}" \
             --output "type=image,push=true" \
@@ -147,7 +148,7 @@ jobs:
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
             $(printf '%s' "${LABELS[@]/#/ --label }" ) \
             $(printf '%s' "${LABELS[@]/#/ --annotation }" ) \
-            $(printf '%s' "${TAGS[@]/#/ --tag }" ) "${DIRECTORY}"
+            $(printf '%s' "${TAGS[@]/#/ --tag }" ) .
           
           rm -f ${HOME}/.docker/config.json
       -
