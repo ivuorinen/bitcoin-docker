@@ -24,7 +24,7 @@ jobs:
         id: latest_tag
         with:
           variables: |
-            repo: bitcoin
+            repo: ${{ github.event.repository.name }}
             owner: bitcoin
           query: |
             query tag($owner: String!, $repo: String!) {
@@ -70,34 +70,8 @@ jobs:
             fi
           fi
       -
-        name: Checkout
+        name: Extract version information
         if: env.exists == 'false'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - 
-        name: Set up Docker Buildx
-        if: env.exists == 'false'
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Login into Docker Hub
-        if: env.exists == 'false'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-      -
-        name: Login to GitHub Container Registry
-        if: env.exists == 'false'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - 
-        name: Build Docker image
-        if: env.exists == 'false'
-        id: build
         run: |
           #!/bin/bash
           
@@ -111,46 +85,72 @@ jobs:
           fi
           
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
-          echo "version=${TARGET_BASE}" >> $GITHUB_OUTPUT
           
           latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
           echo "Official release is: $latest_release, target release is: $TARGET_BASE"
           
-          DIRECTORY="."
-          PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
-          BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          TITLE="$(grep --only-matching --perl-regex "(?<=image.title\=).*" $DIRECTORY/Dockerfile | sed -e 's/ /\xc2\xa0/g')"
-          DESC="$(grep --only-matching --perl-regex "(?<=image.description\=).*" $DIRECTORY/Dockerfile | sed -e 's/ /\xc2\xa0/g')"
-   
-          TAGS=()
-          TAGS=("${{ github.repository }}:${TARGET_BASE}")
-          [[ "${TARGET_BASE}" == "${latest_release}" ]] && TAGS+=("${{ github.repository }}:latest")
-          TAGS+=("ghcr.io/${{ github.repository }}:${TARGET_BASE}")
-          [[ "${TARGET_BASE}" == "${latest_release}" ]] && TAGS+=("ghcr.io/${{ github.repository }}:latest")
-          
-          LABELS=()
-          LABELS=("org.opencontainers.image.licenses=MIT")
-          LABELS+=("org.opencontainers.image.title=${TITLE}")
-          LABELS+=("org.opencontainers.image.description=${DESC}")
-          LABELS+=("org.opencontainers.image.version=${TARGET_BASE}")
-          LABELS+=("org.opencontainers.image.created=${BUILD_DATE}")
-          LABELS+=("org.opencontainers.image.revision=${GITHUB_RUN_ID}")
-          LABELS+=("org.opencontainers.image.url=https://hub.docker.com/r/${{ github.repository }}")
-          LABELS+=("org.opencontainers.image.source=https://github.com/${{ github.repository }}")
-
-          cd "${DIRECTORY}"
-          docker buildx build --progress=plain \
-            --platform "${PLATFORMS}" \
-            --output "type=image,push=true" \
-            --build-arg "BITCOIN_RC=${TARGET_RC}" \
-            --build-arg "BITCOIN_VERSION=${TARGET_VERSION}" \
-            --build-arg "VCS_REF=${GITHUB_SHA::8}" \
-            $(printf '%s' "${LABELS[@]/#/ --label }" ) \
-            $(printf '%s' "${LABELS[@]/#/ --annotation }" ) \
-            $(printf '%s' "${TAGS[@]/#/ --tag }" ) .
-          
-          rm -f ${HOME}/.docker/config.json
+          echo "latest_release=${latest_release}" >> $GITHUB_OUTPUT
+          echo "TARGET_RC=${TARGET_RC}" >> $GITHUB_OUTPUT
+          echo "TARGET_BASE=${TARGET_BASE}" >> $GITHUB_OUTPUT
+          echo "TARGET_VERSION=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+      -
+        name: Checkout
+        if: env.exists == 'false'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      -
+        name: Docker metadata
+        id: meta
+        if: env.exists == 'false'
+        uses: docker/metadata-action@v5
+        with:
+          context: git
+          images: |
+            ${{ secrets.DOCKERHUB_REPO }}
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest,priority=100,enable=${{ env.TARGET_BASE == env.latest_release }}
+            type=raw,value=${{ env.TARGET_BASE }}
+          labels: |
+            org.opencontainers.image.title=${{ vars.NAME }}
+      - 
+        name: Set up Docker Buildx
+        if: env.exists == 'false'
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login into Docker Hub
+        if: env.exists == 'false'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Login to GitHub Container Registry
+        if: env.exists == 'false'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build Docker image
+        if: env.exists == 'false'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          provenance: false
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VCS_REF=${GITHUB_SHA::8}
+            BITCOIN_RC=${{ env.TARGET_RC }}
+            BITCOIN_VERSION=${{ env.TARGET_VERSION }}
+            VERSION_ARG=${{ steps.meta.outputs.version }}
       -
         name: Create a release
         if: env.exists == 'false'
@@ -158,8 +158,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
         with:
-          tag: "v${{ steps.build.outputs.version }}"
-          title: "v${{ steps.build.outputs.version }}"
+          tag: "v${{ steps.meta.outputs.version }}"
+          title: "v${{ steps.meta.outputs.version }}"
       -
        name: Send mail
        if: env.exists == 'false'
@@ -168,8 +168,8 @@ jobs:
          to: ${{secrets.MAILTO}}
          from: Github Actions <${{secrets.MAILTO}}>
          connection_url: ${{secrets.MAIL_CONNECTION}}
-         subject: Build of ${{ github.event.repository.name }} v${{ steps.build.outputs.version }} completed
+         subject: Build of ${{ github.event.repository.name }} v${{ steps.meta.outputs.version }} completed
          body: |
-              The build job of ${{ github.event.repository.name }} v${{ steps.build.outputs.version }} was completed successfully! 
+              The build job of ${{ github.event.repository.name }} v${{ steps.meta.outputs.version }} was completed successfully! 
               
               See https://github.com/${{ github.repository }}/actions for more information.
