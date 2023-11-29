@@ -24,7 +24,7 @@ jobs:
         id: latest_tag
         with:
           variables: |
-            repo: ${{ github.event.repository.name }}
+            repo: bitcoin
             owner: bitcoin
           query: |
             query tag($owner: String!, $repo: String!) {
