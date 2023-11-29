@@ -22,9 +22,6 @@ ARG BITCOIN_BASE=${BITCOIN_VERSION}${BITCOIN_RC}
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
-LABEL org.opencontainers.image.title="Bitcoin Core"
-LABEL org.opencontainers.image.description="Bitcoin Core docker image"
-
 SHELL ["/bin/bash", "-c"]
 RUN set -ex \
   && if [ -n "${BITCOIN_RC}" ]; then export SUBDIR=/test.; else export SUBDIR=; fi \
