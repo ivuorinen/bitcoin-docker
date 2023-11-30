@@ -115,6 +115,8 @@ jobs:
             type=raw,value=${{ env.TARGET_BASE }}
           labels: |
             org.opencontainers.image.title=${{ vars.NAME }}
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
       - 
         name: Set up Docker Buildx
         if: env.exists == 'false'
