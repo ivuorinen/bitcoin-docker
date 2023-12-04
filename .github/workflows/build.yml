@@ -90,10 +90,10 @@ jobs:
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
           echo "Official release is: $latest_release, target release is: $TARGET_BASE"
           
-          echo "latest_release=${latest_release}" >> $GITHUB_OUTPUT
-          echo "target_rc=${TARGET_RC}" >> $GITHUB_OUTPUT
-          echo "target_base=${TARGET_BASE}" >> $GITHUB_OUTPUT
-          echo "target_version=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+          echo "latest_release=\"${latest_release}\"" >> $GITHUB_OUTPUT
+          echo "target_rc=\"${TARGET_RC}\"" >> $GITHUB_OUTPUT
+          echo "target_base=\"${TARGET_BASE}\"" >> $GITHUB_OUTPUT
+          echo "target_version=\"${TARGET_VERSION}\"" >> $GITHUB_OUTPUT
       -
         name: Checkout
         if: env.exists == 'false'
