@@ -112,8 +112,8 @@ jobs:
             ${{ secrets.DOCKERHUB_REPO }}
             ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest,priority=100,enable=${{ env.target_base == env.latest_release }}
-            type=raw,value=${{ env.target_base }}
+            type=raw,value=latest,priority=100,enable=${{ steps.version.outputs.target_base == steps.version.outputs.latest_release }}
+            type=raw,value=${{ steps.version.outputs.target_base }}
           labels: |
             org.opencontainers.image.title=${{ vars.NAME }}
         env:
@@ -151,7 +151,7 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           build-args: |
             VCS_REF=${GITHUB_SHA::8}
-            BITCOIN_RC=${{ env.target_rc }}
+            BITCOIN_RC=${{ steps.version.outputs.target_rc }}
             BITCOIN_VERSION=${{ steps.version.outputs.target_version }}
             VERSION_ARG=${{ steps.meta.outputs.version }}
       -
