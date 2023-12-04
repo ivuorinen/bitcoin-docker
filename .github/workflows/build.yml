@@ -77,27 +77,23 @@ jobs:
           
           TARGET_VERSION="${{ env.latest_tag }}"
           TARGET_VERSION="${TARGET_VERSION%%rc*}"
-
-          echo "TARGET_VERSION=${TARGET_VERSION}"
           
           if [[ "${TARGET_VERSION}" != "${{ env.latest_tag }}" ]]; then
             TARGET_RC="${{ env.latest_tag }}"
             TARGET_POS=${#TARGET_VERSION}
             TARGET_RC="${TARGET_RC:TARGET_POS}"
           fi
-          echo "TARGET_RC=${TARGET_RC}"
           
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
-          echo "TARGET_BASE=${TARGET_BASE}"
           
           latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
           echo "Official release is: $latest_release, target release is: $TARGET_BASE"
           
           echo "latest_release=${latest_release}" >> $GITHUB_OUTPUT
-          echo "TARGET_RC=${TARGET_RC}" >> $GITHUB_OUTPUT
-          echo "TARGET_BASE=${TARGET_BASE}" >> $GITHUB_OUTPUT
-          echo "TARGET_VERSION=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+          echo "target_rc=${TARGET_RC}" >> $GITHUB_OUTPUT
+          echo "target_base=${TARGET_BASE}" >> $GITHUB_OUTPUT
+          echo "target_version=${TARGET_VERSION}" >> $GITHUB_OUTPUT
       -
         name: Checkout
         if: env.exists == 'false'
@@ -115,8 +111,8 @@ jobs:
             ${{ secrets.DOCKERHUB_REPO }}
             ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest,priority=100,enable=${{ env.TARGET_BASE == env.latest_release }}
-            type=raw,value=${{ env.TARGET_BASE }}
+            type=raw,value=latest,priority=100,enable=${{ env.target_base == env.latest_release }}
+            type=raw,value=${{ env.target_base }}
           labels: |
             org.opencontainers.image.title=${{ vars.NAME }}
         env:
@@ -154,8 +150,8 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           build-args: |
             VCS_REF=${GITHUB_SHA::8}
-            BITCOIN_RC=${{ env.TARGET_RC }}
-            BITCOIN_VERSION=${{ env.TARGET_VERSION }}
+            BITCOIN_RC=${{ env.target_rc }}
+            BITCOIN_VERSION=${{ env.target_version }}
             VERSION_ARG=${{ steps.meta.outputs.version }}
       -
         name: Create a release
