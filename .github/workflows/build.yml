@@ -89,7 +89,11 @@ jobs:
           
           latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
-          echo "Official release is: $latest_release, target release is: $TARGET_BASE"
+          echo "Official latest release is: $latest_release, target release is: $TARGET_BASE"
+
+          if [[ -z "$TARGET_RC" ]]; then
+            [[ "$latest_release" != "$TARGET_BASE" ]] && echo "Release $TARGET_BASE is not the latest on Github.." && exit 1
+          fi
           
           echo "latest_release=$latest_release" >> $GITHUB_OUTPUT
           echo "target_rc=$TARGET_RC" >> $GITHUB_OUTPUT
