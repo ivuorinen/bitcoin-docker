@@ -115,7 +115,7 @@ jobs:
             ${{ secrets.DOCKERHUB_REPO }}
             ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest,priority=100,enable=${{ steps.version.outputs.target_rc == "" }}
+            type=raw,value=latest,priority=100,enable=${{ steps.version.outputs.target_rc == '' }}
             type=raw,value=${{ steps.version.outputs.target_base }}
           labels: |
             org.opencontainers.image.title=${{ vars.NAME }}
