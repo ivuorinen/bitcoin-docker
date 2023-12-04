@@ -77,14 +77,18 @@ jobs:
           
           TARGET_VERSION="${{ env.latest_tag }}"
           TARGET_VERSION="${TARGET_VERSION%%rc*}"
+
+          echo "TARGET_VERSION=${TARGET_VERSION}"
           
           if [[ "${TARGET_VERSION}" != "${{ env.latest_tag }}" ]]; then
             TARGET_RC="${{ env.latest_tag }}"
             TARGET_POS=${#TARGET_VERSION}
             TARGET_RC="${TARGET_RC:TARGET_POS}"
           fi
+          echo "TARGET_RC=${TARGET_RC}"
           
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
+          echo "TARGET_BASE=${TARGET_BASE}"
           
           latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
