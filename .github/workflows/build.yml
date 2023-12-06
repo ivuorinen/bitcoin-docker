@@ -89,10 +89,9 @@ jobs:
           
           latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
-          echo "Official latest release is: $latest_release, target release is: $TARGET_BASE"
 
           if [[ -z "$TARGET_RC" ]] && [[ "$latest_release" != "$TARGET_BASE" ]]; then
-            echo "Release $TARGET_BASE is not the latest release published on Github.."
+            echo "Release v$TARGET_BASE is not the latest release that is published on Github (v$latest_release).."
             echo "exists=true" >> $GITHUB_ENV
             exit 0
           fi
