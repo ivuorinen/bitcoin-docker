@@ -57,17 +57,17 @@ jobs:
           #!/bin/bash
           if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
             echo "exists=true" >> $GITHUB_ENV
+            exit 0
+          fi
+          loc="${{ env.latest_tag }}"
+          loc="${loc//rc/\/test.rc}"
+          url="https://bitcoincore.org/bin/bitcoin-core-${loc}/SHA256SUMS"
+          echo "Checking if ${url/\/SHA256SUMS/} exists.."
+          resp=$(curl -I 2>/dev/null $url | head -1)
+          if echo $resp | grep 404 >/dev/null; then
+           echo "exists=true" >> $GITHUB_ENV
           else
-            loc="${{ env.latest_tag }}"
-            loc="${loc//rc/\/test.rc}"
-            url="https://bitcoincore.org/bin/bitcoin-core-${loc}/SHA256SUMS"
-            echo "Checking if ${url/\/SHA256SUMS/} exists.."
-            resp=$(curl -I 2>/dev/null $url | head -1)
-            if echo $resp | grep 404 >/dev/null; then
-              echo "exists=true" >> $GITHUB_ENV
-            else
-              echo "exists=false" >> $GITHUB_ENV
-            fi
+           echo "exists=false" >> $GITHUB_ENV
           fi
       -
         name: Extract version information
@@ -92,7 +92,9 @@ jobs:
           echo "Official latest release is: $latest_release, target release is: $TARGET_BASE"
 
           if [[ -z "$TARGET_RC" ]] && [[ "$latest_release" != "$TARGET_BASE" ]]; then
-            echo "Release $TARGET_BASE is not the latest release published on Github.." && exit 1
+            echo "Release $TARGET_BASE is not the latest release published on Github.."
+            echo "exists=true" >> $GITHUB_ENV
+            exit 0
           fi
           
           echo "target_rc=$TARGET_RC" >> $GITHUB_OUTPUT
