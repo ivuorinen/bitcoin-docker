@@ -88,20 +88,21 @@ jobs:
           
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
           
-          #latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-          latest_release=$(curl -sf "https://api.github.com/repos/bitcoin/bitcoin/tags" | jq -r '.[0].name')
+          if [[ -z "$TARGET_RC" ]]; then
           
-          [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
-
-          if [[ -z "$TARGET_RC" ]] && [[ "$latest_release" != "$TARGET_BASE" ]]; then
-            echo "Release v$TARGET_BASE is not the latest release that is published on Github (v$latest_release).."
-            echo "exists=true" >> $GITHUB_ENV
-            exit 0
+            latest_release=$(curl -sf "https://api.github.com/repos/bitcoin/bitcoin/tags" | jq -r '.[0].name')
+            #latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          
+            [[ -z "$latest_release" ]] && echo "JSON error" && exit 1
+            [[ "$latest_release" == "null" ]] && echo "JSON error" && exit 1
+            [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
+            
           fi
-          exit 1
+
           echo "target_rc=$TARGET_RC" >> $GITHUB_OUTPUT
           echo "target_base=$TARGET_BASE" >> $GITHUB_OUTPUT
           echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
+          echo "latest_release=$latest_release" >> $GITHUB_OUTPUT
       -
         name: Checkout
         if: env.exists == 'false'
@@ -119,7 +120,7 @@ jobs:
             ${{ secrets.DOCKERHUB_REPO }}
             ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest,priority=100,enable=${{ steps.version.outputs.target_rc == '' }}
+            type=raw,value=latest,priority=100,enable=${{ steps.version.outputs.target_base == steps.version.outputs.latest_release }}
             type=raw,value=${{ steps.version.outputs.target_base }}
           labels: |
             org.opencontainers.image.title=${{ vars.NAME }}
