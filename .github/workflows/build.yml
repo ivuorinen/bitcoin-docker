@@ -41,6 +41,7 @@ jobs:
         run: |
           #!/bin/bash
           latest_tag=$(echo '${{ steps.latest_tag.outputs.data }}' | jq '.repository.refs.edges[][].name' -r)
+          latest_tag="24.2"
           [ -z "$latest_tag" ] && echo "Tag not found!" && exit 1
           [[ "$latest_tag" = v* ]] && latest_tag="${latest_tag:1}"
           echo "Found tag: \"${latest_tag}\""
@@ -87,7 +88,9 @@ jobs:
           
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
           
-          latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          #latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          latest_release=$(curl -sf "https://api.github.com/repos/bitcoin/bitcoin/tags" | jq -r '.[0].name')
+          
           [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
 
           if [[ -z "$TARGET_RC" ]] && [[ "$latest_release" != "$TARGET_BASE" ]]; then
@@ -95,7 +98,7 @@ jobs:
             echo "exists=true" >> $GITHUB_ENV
             exit 0
           fi
-          
+          exit 1
           echo "target_rc=$TARGET_RC" >> $GITHUB_OUTPUT
           echo "target_base=$TARGET_BASE" >> $GITHUB_OUTPUT
           echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
