@@ -1,6 +1,6 @@
-<h1 align="center">Bitcoin for Docker<br />
+<h1 align="center">Bitcoin Core<br />
 <div align="center">
-<img src="https://avatars.githubusercontent.com/u/133400625?s=200&v=4" title="Logo" style="max-width:100%;" width="128" />
+<img src="https://raw.githubusercontent.com/dobtc/bitcoin/master/.github/logo.png" title="Logo" style="max-width:100%;" width="128" />
 </div>
 <div align="center">
 
@@ -26,7 +26,7 @@ version: "3"
 services:
   bitcoin:
     container_name: bitcoin
-    image: dobtc/docker-bitcoin:latest
+    image: dobtc/bitcoin:latest
     ports:
       - 8332:8332
       - 8333:8333
@@ -38,7 +38,7 @@ services:
 Via `docker run`
 
 ```bash
-docker run -it --rm dobtc/docker-bitcoin:latest -printtoconsole
+docker run -it --rm dobtc/bitcoin:latest -printtoconsole
 ```
 
 Executing `getinfo` on the running container:
@@ -48,10 +48,10 @@ docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
 ```
 
 [build_url]: https://github.com/dobtc/bitcoin/
-[hub_url]: https://hub.docker.com/r/dobtc/docker-bitcoin
-[tag_url]: https://hub.docker.com/r/dobtc/docker-bitcoin/tags
+[hub_url]: https://hub.docker.com/r/dobtc/bitcoin
+[tag_url]: https://hub.docker.com/r/dobtc/bitcoin/tags
 
 [Build]: https://github.com/dobtc/bitcoin/actions/workflows/build.yml/badge.svg
-[Size]: https://img.shields.io/docker/image-size/dobtc/docker-bitcoin/latest?color=066da5&label=size
-[Pulls]: https://img.shields.io/docker/pulls/dobtc/docker-bitcoin.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/dobtc/docker-bitcoin/latest?arch=amd64&sort=semver&color=066da5
+[Size]: https://img.shields.io/docker/image-size/dobtc/bitcoin/latest?color=066da5&label=size
+[Pulls]: https://img.shields.io/docker/pulls/dobtc/bitcoin.svg?style=flat&label=pulls&logo=docker
+[Version]: https://img.shields.io/docker/v/dobtc/bitcoin/latest?arch=amd64&sort=semver&color=066da5
