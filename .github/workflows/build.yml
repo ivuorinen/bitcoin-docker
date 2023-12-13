@@ -57,10 +57,10 @@ jobs:
         name: Finish when found
         run: |
           #!/bin/bash
-          if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
+          #if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
             #echo "exists=true" >> $GITHUB_ENV
             #exit 0
-          fi
+          #fi
           loc="${{ env.latest_tag }}"
           loc="${loc//rc/\/test.rc}"
           url="https://bitcoincore.org/bin/bitcoin-core-${loc}/SHA256SUMS"
