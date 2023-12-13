@@ -58,8 +58,8 @@ jobs:
         run: |
           #!/bin/bash
           if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
-            echo "exists=true" >> $GITHUB_ENV
-            exit 0
+            #echo "exists=true" >> $GITHUB_ENV
+            #exit 0
           fi
           loc="${{ env.latest_tag }}"
           loc="${loc//rc/\/test.rc}"
