@@ -1,4 +1,4 @@
-<h1 align="center">Docker Bitcoin<br />
+<h1 align="center">Bitcoin for Docker<br />
 <div align="center">
 <img src="https://avatars.githubusercontent.com/u/133400625?s=200&v=4" title="Logo" style="max-width:100%;" width="128" />
 </div>
@@ -47,11 +47,11 @@ Executing `getinfo` on the running container:
 docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
 ```
 
-[build_url]: https://github.com/dobtc/docker-bitcoin/
+[build_url]: https://github.com/dobtc/bitcoin/
 [hub_url]: https://hub.docker.com/r/dobtc/docker-bitcoin
 [tag_url]: https://hub.docker.com/r/dobtc/docker-bitcoin/tags
 
-[Build]: https://github.com/dobtc/docker-bitcoin/actions/workflows/build.yml/badge.svg
+[Build]: https://github.com/dobtc/bitcoin/actions/workflows/build.yml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/dobtc/docker-bitcoin/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/dobtc/docker-bitcoin.svg?style=flat&label=pulls&logo=docker
 [Version]: https://img.shields.io/docker/v/dobtc/docker-bitcoin/latest?arch=amd64&sort=semver&color=066da5
