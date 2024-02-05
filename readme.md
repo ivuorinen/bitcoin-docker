@@ -47,6 +47,9 @@ Executing `getinfo` on the running container:
 docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
 ```
 
+## Stars
+[![Stars](https://starchart.cc/dobtc/bitcoin.svg?variant=adaptive)](https://starchart.cc/dobtc/bitcoin)
+
 [build_url]: https://github.com/dobtc/bitcoin/
 [hub_url]: https://hub.docker.com/r/dobtc/bitcoin
 [tag_url]: https://hub.docker.com/r/dobtc/bitcoin/tags
