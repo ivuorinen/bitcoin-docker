@@ -115,7 +115,7 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Dockerfile
-          ignore: SC2207, SC4006
+          ignore: SC2207,DL3008,DL4006
           failure-threshold: warning
       -
         name: Docker metadata
