@@ -89,14 +89,18 @@ jobs:
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
           
           if [[ -z "$TARGET_RC" ]]; then
-          
-            latest_release=$(curl -sf "https://api.github.com/repos/bitcoin/bitcoin/tags" | jq -r '.[0].name')
-            #latest_release=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-          
+      
+            tags=$(curl -sf "https://api.github.com/repos/bitcoin/bitcoin/tags")
+            latest_release=$(echo "$tags" | jq -r '.[0].name')
+            [[ "$latest_release" == *"rc"* ]] && latest_release=$(echo "$tags" | jq -r '.[1].name')
+            [[ "$latest_release" == *"rc"* ]] && latest_release=$(echo "$tags" | jq -r '.[2].name')
+            [[ "$latest_release" == *"rc"* ]] && latest_release=$(echo "$tags" | jq -r '.[3].name')
+        
             [[ -z "$latest_release" ]] && echo "JSON error" && exit 1
             [[ "$latest_release" == "null" ]] && echo "JSON error" && exit 1
             [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
-            
+
+            echo "Latest release: $latest_release"
           fi
 
           echo "target_rc=$TARGET_RC" >> $GITHUB_OUTPUT
