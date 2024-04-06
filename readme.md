@@ -19,7 +19,7 @@ A docker image of Bitcoin Core with support for the following platforms:
 
 ## Usage
 
-Via `docker-compose.yml`
+Via `compose.yml`
 
 ```yaml
 version: "3"
