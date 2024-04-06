@@ -19,7 +19,7 @@ A docker image of Bitcoin Core with support for the following platforms:
 
 ## Usage
 
-Via `compose.yml`
+Via Docker Compose:
 
 ```yaml
 version: "3"
@@ -35,7 +35,7 @@ services:
     restart: on-failure
 ```
 
-Via `docker run`
+Via Docker CLI:
 
 ```bash
 docker run -it --rm dobtc/bitcoin -printtoconsole
