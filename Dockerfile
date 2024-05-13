@@ -4,8 +4,8 @@ ARG UID=1001
 ARG GID=1001
 
 ARG DEBCONF_NOWARNINGS="yes"
-ARG DEBIAN_FRONTEND noninteractive
-ARG DEBCONF_NONINTERACTIVE_SEEN true
+ARG DEBIAN_FRONTEND="noninteractive"
+ARG DEBCONF_NONINTERACTIVE_SEEN="true"
 
 RUN groupadd --gid ${GID} bitcoin \
   && useradd --create-home --no-log-init -u ${UID} -g ${GID} bitcoin \
@@ -24,7 +24,7 @@ ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
 SHELL ["/bin/bash", "-c"]
-RUN set -ex \
+RUN set -eux \
   && if [ -n "${BITCOIN_RC}" ]; then export SUBDIR=/test.; else export SUBDIR=; fi \
   && export URL="https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${SUBDIR}${BITCOIN_RC}" \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
@@ -44,8 +44,7 @@ RUN set -ex \
   && rm -rf "/opt/bitcoin-${BITCOIN_BASE}/bin/bitcoin-qt" \
   && rm -rf "/opt/bitcoin-${BITCOIN_BASE}/bin/test_bitcoin"
   
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
 VOLUME ["/home/bitcoin/.bitcoin"]
 
