@@ -22,7 +22,6 @@ A docker image of Bitcoin Core with support for the following platforms:
 Via Docker Compose:
 
 ```yaml
-version: "3"
 services:
   bitcoin:
     container_name: bitcoin
