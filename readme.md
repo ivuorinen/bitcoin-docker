@@ -31,7 +31,6 @@ services:
       - 8333:8333
     volumes:
       - /opt/bitcoin:/home/bitcoin/.bitcoin
-    restart: on-failure
 ```
 
 Via Docker CLI:
