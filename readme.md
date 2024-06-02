@@ -25,7 +25,7 @@ Via Docker Compose:
 services:
   bitcoin:
     container_name: bitcoin
-    image: ivuorinen-docker/bitcoin:latest
+    image: ivuorinen/bitcoin-docker:latest
     ports:
       - 8332:8332
       - 8333:8333
@@ -47,7 +47,7 @@ docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
 
 ## Stars
 
-[![Stars](https://starchart.cc/dobtc/bitcoin.svg?variant=adaptive)](https://starchart.cc/dobtc/bitcoin)
+[![Stars](https://starchart.cc/ivuorinen/bitcoin-docker.svg?variant=adaptive)](https://starchart.cc/ivuorinen/bitcoin-docker)
 
 [build_url]: https://github.com/ivuorinen/bitcoin-docker/
 [hub_url]: https://hub.docker.com/r/ivuorinen/bitcoin-docker
