@@ -25,7 +25,7 @@ Via Docker Compose:
 services:
   bitcoin:
     container_name: bitcoin
-    image: ivuorinen-docker/bitcoin
+    image: ivuorinen-docker/bitcoin:latest
     ports:
       - 8332:8332
       - 8333:8333
@@ -49,10 +49,10 @@ docker exec --user bitcoin bitcoin bitcoin-cli -getinfo
 
 [![Stars](https://starchart.cc/dobtc/bitcoin.svg?variant=adaptive)](https://starchart.cc/dobtc/bitcoin)
 
-[build_url]: https://github.com/dobtc/bitcoin/
-[hub_url]: https://hub.docker.com/r/dobtc/bitcoin
-[tag_url]: https://hub.docker.com/r/dobtc/bitcoin/tags
-[Build]: https://github.com/dobtc/bitcoin/actions/workflows/build.yml/badge.svg
-[Size]: https://img.shields.io/docker/image-size/dobtc/bitcoin/latest?color=066da5&label=size
-[Pulls]: https://img.shields.io/docker/pulls/dobtc/bitcoin.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/dobtc/bitcoin/latest?arch=amd64&sort=semver&color=066da5
+[build_url]: https://github.com/ivuorinen/bitcoin-docker/
+[hub_url]: https://hub.docker.com/r/ivuorinen/bitcoin-docker
+[tag_url]: https://hub.docker.com/r/ivuorinen/bitcoin-docker/tags
+[Build]: https://github.com/ivuorinen/bitcoin-docker/actions/workflows/build.yml/badge.svg
+[Size]: https://img.shields.io/docker/image-size/ivuorinen/bitcoin-docker/latest?color=066da5&label=size
+[Pulls]: https://img.shields.io/docker/pulls/ivuorinen/bitcoin-docker.svg?style=flat&label=pulls&logo=docker
+[Version]: https://img.shields.io/docker/v/ivuorinen/bitcoin-docker/latest?arch=amd64&sort=semver&color=066da5
