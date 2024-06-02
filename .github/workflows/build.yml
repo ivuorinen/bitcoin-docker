@@ -3,7 +3,7 @@ name: Build
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 concurrency:
   group: build
@@ -18,8 +18,7 @@ jobs:
       packages: write
       contents: read
     steps:
-      - 
-        name: Run graphql query to get tag
+      - name: Run graphql query to get tag
         uses: octokit/graphql-action@v2.x
         id: latest_tag
         with:
@@ -36,8 +35,7 @@ jobs:
                } } } } }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - 
-        name: Parse tag from query output
+      - name: Parse tag from query output
         run: |
           #!/bin/bash
           latest_tag=$(echo '${{ steps.latest_tag.outputs.data }}' | jq '.repository.refs.edges[][].name' -r)
@@ -46,14 +44,12 @@ jobs:
           [[ "$latest_tag" = v* ]] && latest_tag="${latest_tag:1}"
           echo "Found tag: \"${latest_tag}\""
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
-      - 
-        name: Check if the tag exists locally
+      - name: Check if the tag exists locally
         uses: action-pack/tag-exists@v1
         id: checkTag
-        with: 
-          tag: 'v${{ env.latest_tag }}'         
-      -
-        name: Finish when found
+        with:
+          tag: "v${{ env.latest_tag }}"
+      - name: Finish when found
         run: |
           #!/bin/bash
           if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
@@ -70,32 +66,31 @@ jobs:
           else
            echo "exists=false" >> $GITHUB_ENV
           fi
-      -
-        name: Extract version information
+      - name: Extract version information
         if: env.exists == 'false'
         id: version
         run: |
           #!/bin/bash
-          
+
           TARGET_VERSION="${{ env.latest_tag }}"
           TARGET_VERSION="${TARGET_VERSION%%rc*}"
-          
+
           if [[ "${TARGET_VERSION}" != "${{ env.latest_tag }}" ]]; then
             TARGET_RC="${{ env.latest_tag }}"
             TARGET_POS=${#TARGET_VERSION}
             TARGET_RC="${TARGET_RC:TARGET_POS}"
           fi
-          
+
           TARGET_BASE="${TARGET_VERSION}${TARGET_RC}"
-          
+
           if [[ -z "$TARGET_RC" ]]; then
-      
+
             tags=$(curl -sf "https://api.github.com/repos/bitcoin/bitcoin/tags")
             latest_release=$(echo "$tags" | jq -r '.[0].name')
             [[ "$latest_release" == *"rc"* ]] && latest_release=$(echo "$tags" | jq -r '.[1].name')
             [[ "$latest_release" == *"rc"* ]] && latest_release=$(echo "$tags" | jq -r '.[2].name')
             [[ "$latest_release" == *"rc"* ]] && latest_release=$(echo "$tags" | jq -r '.[3].name')
-        
+
             [[ -z "$latest_release" ]] && echo "JSON error" && exit 1
             [[ "$latest_release" == "null" ]] && echo "JSON error" && exit 1
             [[ "$latest_release" = v* ]] && latest_release="${latest_release:1}"
@@ -107,22 +102,19 @@ jobs:
           echo "target_base=$TARGET_BASE" >> $GITHUB_OUTPUT
           echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
           echo "latest_release=$latest_release" >> $GITHUB_OUTPUT
-      -
-        name: Checkout
+      - name: Checkout
         if: env.exists == 'false'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - 
-        name: Lint Dockerfile
+      - name: Lint Dockerfile
         if: env.exists == 'false'
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Dockerfile
           ignore: SC2207,DL3008,DL4006
           failure-threshold: warning
-      -
-        name: Docker metadata
+      - name: Docker metadata
         id: meta
         if: env.exists == 'false'
         uses: docker/metadata-action@v5
@@ -138,27 +130,23 @@ jobs:
             org.opencontainers.image.title=${{ vars.NAME }}
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
-      - 
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         if: env.exists == 'false'
         uses: docker/setup-buildx-action@v3
-      -
-        name: Login into Docker Hub
+      - name: Login into Docker Hub
         if: env.exists == 'false'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Login to GitHub Container Registry
+      - name: Login to GitHub Container Registry
         if: env.exists == 'false'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: Build Docker image
+      - name: Build Docker image
         if: env.exists == 'false'
         uses: docker/build-push-action@v5
         with:
@@ -173,24 +161,22 @@ jobs:
             BITCOIN_RC=${{ steps.version.outputs.target_rc }}
             BITCOIN_VERSION=${{ steps.version.outputs.target_version }}
             VERSION_ARG=${{ steps.meta.outputs.version }}
-      -
-        name: Create a release
+      - name: Create a release
         if: env.exists == 'false'
         uses: action-pack/github-release@v2
         with:
           tag: "v${{ steps.meta.outputs.version }}"
           title: "v${{ steps.meta.outputs.version }}"
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
-      -
-       name: Send mail
-       if: env.exists == 'false'
-       uses: action-pack/send-mail@v1
-       with:
-         to: ${{secrets.MAILTO}}
-         from: Github Actions <${{secrets.MAILTO}}>
-         connection_url: ${{secrets.MAIL_CONNECTION}}
-         subject: Build of ${{ github.event.repository.name }} v${{ steps.meta.outputs.version }} completed
-         body: |
-              The build job of ${{ github.event.repository.name }} v${{ steps.meta.outputs.version }} was completed successfully! 
-              
-              See https://github.com/${{ github.repository }}/actions for more information.
+      - name: Send mail
+        if: env.exists == 'false'
+        uses: action-pack/send-mail@v1
+        with:
+          to: ${{secrets.MAILTO}}
+          from: Github Actions <${{secrets.MAILTO}}>
+          connection_url: ${{secrets.MAIL_CONNECTION}}
+          subject: Build of ${{ github.event.repository.name }} v${{ steps.meta.outputs.version }} completed
+          body: |
+            The build job of ${{ github.event.repository.name }} v${{ steps.meta.outputs.version }} was completed successfully! 
+
+            See https://github.com/${{ github.repository }}/actions for more information.

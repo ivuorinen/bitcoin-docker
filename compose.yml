@@ -1,7 +1,7 @@
 services:
   bitcoin:
     container_name: bitcoin
-    image: dobtc/bitcoin:latest
+    image: ivuorinen/bitcoin-docker:latest
     ports:
       - 8332:8332
       - 8333:8333

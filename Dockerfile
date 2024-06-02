@@ -43,7 +43,7 @@ RUN set -eux \
   && rm ./*.tar.gz ./*.asc \
   && rm -rf "/opt/bitcoin-${BITCOIN_BASE}/bin/bitcoin-qt" \
   && rm -rf "/opt/bitcoin-${BITCOIN_BASE}/bin/test_bitcoin"
-  
+
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
 VOLUME ["/home/bitcoin/.bitcoin"]
