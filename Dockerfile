@@ -7,6 +7,7 @@ ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND="noninteractive"
 ARG DEBCONF_NONINTERACTIVE_SEEN="true"
 
+# hadolint ignore=DL3008
 RUN groupadd --gid ${GID} bitcoin \
   && useradd --create-home --no-log-init -u ${UID} -g ${GID} bitcoin \
   && apt-get update -y \
@@ -24,6 +25,7 @@ ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
 ENV PATH=/opt/bitcoin-${BITCOIN_BASE}/bin:$PATH
 
 SHELL ["/bin/bash", "-c"]
+# hadolint ignore=SC2207,DL4006
 RUN set -eux \
   && if [ -n "${BITCOIN_RC}" ]; then export SUBDIR=/test.; else export SUBDIR=; fi \
   && export URL="https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}${SUBDIR}${BITCOIN_RC}" \
@@ -64,6 +66,7 @@ HEALTHCHECK --interval=300s --start-period=60s --timeout=20s CMD gosu bitcoin bi
 
 ENTRYPOINT ["/entrypoint.sh"]
 
+# hadolint ignore=DL4006
 RUN bitcoind -version | grep "Bitcoin Core version v${BITCOIN_VERSION}"
 
 CMD ["bitcoind"]
