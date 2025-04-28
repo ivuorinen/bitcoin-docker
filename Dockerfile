@@ -67,6 +67,6 @@ HEALTHCHECK --interval=300s --start-period=60s --timeout=20s CMD gosu bitcoin bi
 ENTRYPOINT ["/entrypoint.sh"]
 
 # hadolint ignore=DL4006
-RUN bitcoind -version | grep "Bitcoin Core version"
+RUN bitcoind -version
 
 CMD ["bitcoind"]
